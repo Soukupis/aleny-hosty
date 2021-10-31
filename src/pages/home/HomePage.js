@@ -1,0 +1,49 @@
+import React from "react";
+import { Grid } from "semantic-ui-react";
+import { Row } from "../auth/styles/AuthStyle";
+import logo from "../../assets/leaf.png";
+import { Link } from "react-router-dom";
+
+import {
+  Container,
+  Card,
+  CardHeader,
+  CardContent,
+} from "./styles/HomePageStyle";
+
+const HomePage = () => {
+  return (
+    <Container columns={1}>
+      <Row verticalAlign="middle" centered>
+        <Grid.Column
+          mobile={16}
+          tablet={10}
+          computer={10}
+          className="center aligned"
+        >
+          <Card className="ui card">
+            <div className="content">
+              <CardHeader className="ui huge header">
+                <img src={logo} alt="leaf-logo" className="ui circular image" />
+                Aleny Hosty
+              </CardHeader>
+            </div>
+            <CardContent className="content">
+              <div className="ui big button gray">
+                <Link style={{ color: "white" }} to="/signup">
+                  Sign up
+                </Link>
+              </div>
+              <div className="ui big button green">
+                <Link style={{ color: "white" }} to="/login">
+                  Log in
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </Grid.Column>
+      </Row>
+    </Container>
+  );
+};
+export default HomePage;
