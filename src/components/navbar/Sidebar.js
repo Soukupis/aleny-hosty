@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../assets/leaf.png";
+import { LogoutButton } from "../index";
 
 const Sidebar = () => {
   return (
@@ -58,10 +59,16 @@ const Sidebar = () => {
             margin: "10px",
           }}
         >
-          <i className="user icon large" style={{ margin: "10px" }}></i>
-          <i className="settings icon large" style={{ margin: "10px" }}></i>
-          <i className="paper plane icon large" style={{ margin: "10px" }}></i>
-          <i className="logout icon large" style={{ margin: "10px" }}></i>
+          <i className="user icon large link" style={{ margin: "10px" }}></i>
+          <i
+            className="settings icon large link"
+            style={{ margin: "10px" }}
+          ></i>
+          <i
+            className="paper plane icon large link"
+            style={{ margin: "10px" }}
+          ></i>
+          <LogoutButton />
         </div>
       </div>
     </>
