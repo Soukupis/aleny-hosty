@@ -1,3 +1,5 @@
-import Navbar from "./navbar/Navbar";
+import Sidebar from "./navbar/Sidebar";
+import LogoutButton from "./navbar/LogoutButton";
+import PrivateRoute from "./PrivateRoute";
 
-export { Navbar };
+export { Sidebar, LogoutButton, PrivateRoute };

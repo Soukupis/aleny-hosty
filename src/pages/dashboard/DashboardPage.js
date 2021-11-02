@@ -1,8 +1,8 @@
 import React from "react";
-import { Navbar } from "../../components";
+import { Sidebar } from "../../components";
 
 const DashboardPage = () => {
-  return <Navbar />;
+  return <Sidebar />;
 };
 
 export default DashboardPage;
