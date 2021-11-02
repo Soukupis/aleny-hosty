@@ -2,23 +2,21 @@ import React from "react";
 import logo from "../../assets/leaf.png";
 import { LogoutButton } from "../index";
 import { Link } from "react-router-dom";
+import {
+  SidebarHeader,
+  HeaderTitle,
+  SidebarFooter,
+  SidebarFooterItem,
+} from "./styles/SidebarStyle";
 
 const Sidebar = () => {
   return (
     <>
       <div className="ui left fixed vertical menu">
-        <div className="item" style={{ display: "flex" }}>
+        <SidebarHeader className="item">
           <img className="ui mini image" src={logo} />
-          <div
-            style={{
-              marginTop: "auto",
-              marginBottom: "auto",
-              marginLeft: "10px",
-            }}
-          >
-            Aleny Hosty
-          </div>
-        </div>
+          <HeaderTitle>Aleny Hosty</HeaderTitle>
+        </SidebarHeader>
         <Link className="item" to="/overview">
           <i className="th icon"></i>
           Přehled
@@ -51,26 +49,12 @@ const Sidebar = () => {
           <i className="book icon"></i>
           Evidence
         </Link>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "0",
-            width: "100%",
-            display: "flex",
-            margin: "10px",
-          }}
-        >
-          <i className="user icon large link" style={{ margin: "10px" }}></i>
-          <i
-            className="settings icon large link"
-            style={{ margin: "10px" }}
-          ></i>
-          <i
-            className="paper plane icon large link"
-            style={{ margin: "10px" }}
-          ></i>
+        <SidebarFooter>
+          <SidebarFooterItem className="user icon large link"></SidebarFooterItem>
+          <SidebarFooterItem className="settings icon large link"></SidebarFooterItem>
+          <SidebarFooterItem className="paper plane icon large link"></SidebarFooterItem>
           <LogoutButton />
-        </div>
+        </SidebarFooter>
       </div>
     </>
   );
