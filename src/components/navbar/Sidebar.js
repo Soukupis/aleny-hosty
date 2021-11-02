@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../assets/leaf.png";
 import { LogoutButton } from "../index";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -18,38 +19,38 @@ const Sidebar = () => {
             Aleny Hosty
           </div>
         </div>
-        <a className="item">
+        <Link className="item" to="/overview">
           <i className="th icon"></i>
           Přehled
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="/sizes">
           <i className="sort numeric up icon"></i>
           Velikosti
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="sun-demands">
           <i className="sun icon"></i>
           Nároky na slunce
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="water-demands">
           <i className="tint icon"></i>
           Nároky na vláhu
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="frost-resistance">
           <i className="snowflake icon"></i>
           Mrazuvzdornost
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="location">
           <i className="map icon"></i>
           Umístění
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="calendar">
           <i className="calendar alternate icon"></i>
           Kalendář
-        </a>
-        <a className="item">
+        </Link>
+        <Link className="item" to="records">
           <i className="book icon"></i>
-          Evidenční čísla
-        </a>
+          Evidence
+        </Link>
         <div
           style={{
             position: "absolute",

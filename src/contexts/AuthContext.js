@@ -20,13 +20,11 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     return auth.signOut();
   };
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setLoading(false);
       setCurrentUser(user);
+      setLoading(false);
     });
-
     return unsubscribe;
   }, []);
 

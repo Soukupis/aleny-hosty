@@ -66,7 +66,7 @@ const LoginForm = () => {
       </form>
       <div className="ui card" style={{ width: "100%" }}>
         <div className="content">
-          New here? <Link to="/register"> Create an account.</Link>
+          New here? <Link to="/signup"> Create an account.</Link>
         </div>
       </div>
     </>
