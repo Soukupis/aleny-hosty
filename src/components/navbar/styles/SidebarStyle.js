@@ -17,4 +17,5 @@ export const SidebarFooter = styled.div`
 `;
 export const SidebarFooterItem = styled.i`
   margin: 10px !important;
+  color: black;
 `;

@@ -1,12 +1,12 @@
 import React from "react";
 import { Sidebar } from "../../components";
 
-const DashboardPage = () => {
+const CalendarPage = () => {
   return (
     <>
-      <Sidebar>DashboardPage</Sidebar>
+      <Sidebar>CalendarPage</Sidebar>
     </>
   );
 };
 
-export default DashboardPage;
+export default CalendarPage;

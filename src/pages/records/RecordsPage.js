@@ -1,12 +1,12 @@
 import React from "react";
 import { Sidebar } from "../../components";
 
-const DashboardPage = () => {
+const RecordsPage = () => {
   return (
     <>
-      <Sidebar>DashboardPage</Sidebar>
+      <Sidebar>RecordsPage</Sidebar>
     </>
   );
 };
 
-export default DashboardPage;
+export default RecordsPage;
