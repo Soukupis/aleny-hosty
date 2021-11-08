@@ -43,7 +43,7 @@ const LoginForm = () => {
               name="username"
               onChange={(event) => setEmail(event.target.value)}
             />
-            <i className="user icon"></i>
+            <i className="envelope icon"></i>
           </div>
         </div>
         <div className="field">
