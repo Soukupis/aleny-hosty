@@ -11,21 +11,19 @@ import RecordsPage from "./records/RecordsPage";
 import AccountPage from "./account/AccountPage";
 import SettingsPage from "./settings/SettingsPage";
 import LoginPage from "./auth/LoginPage";
-import SignupPage from "./auth/SignupPage";
 
 export {
-  HomePage,
-  DashboardPage,
-  LoginPage,
-  SignupPage,
-  OverviewPage,
-  SizesPage,
-  SunDemandsPage,
-  WaterDemandsPage,
-  FrostResistancePage,
-  LocationsPage,
-  CalendarPage,
-  RecordsPage,
-  AccountPage,
-  SettingsPage,
+    HomePage,
+    DashboardPage,
+    LoginPage,
+    OverviewPage,
+    SizesPage,
+    SunDemandsPage,
+    WaterDemandsPage,
+    FrostResistancePage,
+    LocationsPage,
+    CalendarPage,
+    RecordsPage,
+    AccountPage,
+    SettingsPage,
 };

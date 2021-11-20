@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import {
   HomePage,
   DashboardPage,
-  SignupPage,
   LoginPage,
   OverviewPage,
   SizesPage,
@@ -27,7 +26,6 @@ const App = () => {
       <Router>
         <Switch>
           <PublicRoute path="/login" component={LoginPage} />
-          <PublicRoute path="/signup" component={SignupPage} />
           <PrivateRoute path="/dashboard" component={DashboardPage} />
           <PrivateRoute path="/overview" component={OverviewPage} />
           <PrivateRoute path="/sizes" component={SizesPage} />

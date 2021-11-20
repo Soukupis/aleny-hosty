@@ -29,14 +29,9 @@ const HomePage = () => {
               </CardHeader>
             </div>
             <CardContent className="content">
-              <div className="ui big button gray">
-                <Link style={{ color: "white" }} to="/signup">
-                  Sign up
-                </Link>
-              </div>
               <div className="ui big button green">
                 <Link style={{ color: "white" }} to="/login">
-                  Log in
+                  Přihlášení
                 </Link>
               </div>
             </CardContent>

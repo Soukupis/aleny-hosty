@@ -64,11 +64,6 @@ const LoginForm = () => {
           Log In
         </button>
       </form>
-      <div className="ui card" style={{ width: "100%" }}>
-        <div className="content">
-          New here? <Link to="/signup"> Create an account.</Link>
-        </div>
-      </div>
     </>
   );
 };
