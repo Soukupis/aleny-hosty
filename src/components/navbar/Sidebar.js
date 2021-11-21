@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/leaf.png";
+import { LeafImage } from "../../assets/index";
 import { LogoutButton } from "../index";
 import { Link } from "react-router-dom";
 import {
@@ -23,7 +23,7 @@ const Sidebar = ({ children }) => {
       <div id="top-menu" className="ui left fixed vertical menu">
         <Link to="/dashboard">
           <SidebarHeader className="item">
-            <img className="ui mini image" alt="logo" src={logo} />
+            <img className="ui mini image" alt="logo" src={LeafImage} />
             <HeaderTitle>Aleny Hosty</HeaderTitle>
           </SidebarHeader>
         </Link>

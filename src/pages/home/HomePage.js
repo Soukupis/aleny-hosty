@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { Row } from "../auth/styles/AuthStyle";
-import logo from "../../assets/leaf.png";
+import { LeafImage } from "../../assets/index";
 import { Link } from "react-router-dom";
 
 import {
@@ -24,7 +24,11 @@ const HomePage = () => {
           <Card className="ui card">
             <div className="content">
               <CardHeader className="ui huge header">
-                <img src={logo} alt="leaf-logo" className="ui circular image" />
+                <img
+                  src={LeafImage}
+                  alt="leaf-logo"
+                  className="ui circular image"
+                />
                 Aleny Hosty
               </CardHeader>
             </div>

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Grid } from "semantic-ui-react";
-import bg from "../../../assets/bg.jpg";
+import { Background } from "../../../assets/index";
 
 export const Container = styled(Grid)`
-  background-image: url(${bg});
+  background-image: url(${Background});
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
