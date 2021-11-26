@@ -11,13 +11,12 @@ import RecordsPage from "./records/RecordsPage";
 import AccountPage from "./account/AccountPage";
 import SettingsPage from "./settings/SettingsPage";
 import LoginPage from "./auth/LoginPage";
-import SignupPage from "./auth/SignupPage";
+import RecentPage from "./recents/RecentPage";
 
 export {
   HomePage,
   DashboardPage,
   LoginPage,
-  SignupPage,
   OverviewPage,
   SizesPage,
   SunDemandsPage,
@@ -28,4 +27,5 @@ export {
   RecordsPage,
   AccountPage,
   SettingsPage,
+  RecentPage,
 };

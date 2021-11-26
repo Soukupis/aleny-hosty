@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import {
   HomePage,
   DashboardPage,
-  SignupPage,
   LoginPage,
   OverviewPage,
   SizesPage,
@@ -15,6 +14,7 @@ import {
   RecordsPage,
   AccountPage,
   SettingsPage,
+  RecentPage,
 } from "./pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PrivateRoute, PublicRoute } from "./components/index";
@@ -27,8 +27,8 @@ const App = () => {
       <Router>
         <Switch>
           <PublicRoute path="/login" component={LoginPage} />
-          <PublicRoute path="/signup" component={SignupPage} />
           <PrivateRoute path="/dashboard" component={DashboardPage} />
+          <PrivateRoute path="/recents" component={RecentPage} />
           <PrivateRoute path="/overview" component={OverviewPage} />
           <PrivateRoute path="/sizes" component={SizesPage} />
           <PrivateRoute path="/sun-demands" component={SunDemandsPage} />

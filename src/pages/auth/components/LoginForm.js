@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const LoginForm = () => {
@@ -43,7 +43,7 @@ const LoginForm = () => {
               name="username"
               onChange={(event) => setEmail(event.target.value)}
             />
-            <i className="user icon"></i>
+            <i className="envelope icon"></i>
           </div>
         </div>
         <div className="field">
@@ -64,11 +64,6 @@ const LoginForm = () => {
           Log In
         </button>
       </form>
-      <div className="ui card" style={{ width: "100%" }}>
-        <div className="content">
-          New here? <Link to="/signup"> Create an account.</Link>
-        </div>
-      </div>
     </>
   );
 };
