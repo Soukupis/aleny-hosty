@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Input, Form } from "semantic-ui-react";
 
-const AddSizeModal = ({ triggerComponent }) => {
+const AddFrostResistanceModal = ({ triggerComponent }) => {
   const [open, setOpen] = useState(false);
 
   const handleSubmit = () => {};
@@ -15,12 +15,12 @@ const AddSizeModal = ({ triggerComponent }) => {
       centered
       size="small"
     >
-      <Modal.Header>Přidání velikosti</Modal.Header>
+      <Modal.Header>Přidání mrazuvzdornosti</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Form>
             <Form.Group widths="equal">
-              <Form.Field control={Input} label="Velikost" />
+              <Form.Field control={Input} label="Mrazuvzdornost" />
             </Form.Group>
           </Form>
         </Modal.Description>
@@ -36,4 +36,4 @@ const AddSizeModal = ({ triggerComponent }) => {
     </Modal>
   );
 };
-export default AddSizeModal;
+export default AddFrostResistanceModal;

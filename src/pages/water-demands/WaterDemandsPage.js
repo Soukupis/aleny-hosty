@@ -3,32 +3,30 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
-import { AddFrostResistanceModal, ListItemCard } from "./index";
+import { AddWaterDemandModal, ListItemCard } from "./index";
 import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
-const FrostResistancePage = () => {
-  const [frostResistanceItems, setFrostResistanceItems] = useState();
+const WaterDemandsPage = () => {
+  const [waterDemands, setWaterDemands] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    let frostResistanceItemList = [];
+    let waterDemandsList = [];
 
-    async function fetchFrostResistanceData() {
-      let frostResistanceResult = await getFirestoreCollectionData(
-        "frostResistanceItems"
-      );
-      if (!frostResistanceResult) setError(true);
-      frostResistanceItemList = frostResistanceResult.map((item, index) => {
+    async function fetchWaterDemandsData() {
+      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
+      if (!waterDemandsResult) setError(true);
+      waterDemandsList = waterDemandsResult.map((item, index) => {
         return <ListItemCard item={item} key={index} />;
       });
-      setFrostResistanceItems(frostResistanceItemList);
+      setWaterDemands(waterDemandsList);
     }
 
-    fetchFrostResistanceData()
+    fetchWaterDemandsData()
       .then()
       .catch(() => {
         setError(true);
@@ -43,13 +41,13 @@ const FrostResistancePage = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width="eight" floated="left">
-              <Header as="h1">Mrazuvzdornost</Header>
+              <Header as="h1">Nároky na vláhu</Header>
             </Grid.Column>
 
             <div className="right floated">
               <SearchInput />
             </div>
-            <AddFrostResistanceModal
+            <AddWaterDemandModal
               triggerComponent={
                 <Button color="green" icon="plus" loading={loading} />
               }
@@ -57,11 +55,11 @@ const FrostResistancePage = () => {
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">
-          {frostResistanceItems}
+          {waterDemands}
         </List>
       </Sidebar>
     </>
   );
 };
 
-export default FrostResistancePage;
+export default WaterDemandsPage;

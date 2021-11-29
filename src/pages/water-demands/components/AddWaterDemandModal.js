@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Button, Input, Form } from "semantic-ui-react";
 
-const AddSizeModal = ({ triggerComponent }) => {
+const AddWaterDemandModal = ({ triggerComponent }) => {
   const [open, setOpen] = useState(false);
-
   const handleSubmit = () => {};
-
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -15,12 +13,12 @@ const AddSizeModal = ({ triggerComponent }) => {
       centered
       size="small"
     >
-      <Modal.Header>Přidání velikosti</Modal.Header>
+      <Modal.Header>Přidání nároku na vodu</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Form>
             <Form.Group widths="equal">
-              <Form.Field control={Input} label="Velikost" />
+              <Form.Field control={Input} label="Nárok na vláhu" />
             </Form.Group>
           </Form>
         </Modal.Description>
@@ -36,4 +34,4 @@ const AddSizeModal = ({ triggerComponent }) => {
     </Modal>
   );
 };
-export default AddSizeModal;
+export default AddWaterDemandModal;
