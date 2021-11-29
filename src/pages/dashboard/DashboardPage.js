@@ -7,7 +7,6 @@ import {
   IceCubeImage,
   LocationImage,
   CalendarImage,
-  RecordImage,
   SizeImage,
   OverviewImage,
   ClockImage,
@@ -65,12 +64,6 @@ const DashboardPage = () => {
             collection="calendar-items"
             avatar={CalendarImage}
             redirectTo="calendar"
-          />
-          <Card
-            title="Evidence"
-            collection="records"
-            avatar={RecordImage}
-            redirectTo="records"
           />
         </div>
       </Sidebar>

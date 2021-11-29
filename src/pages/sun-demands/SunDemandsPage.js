@@ -3,32 +3,30 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
-import { AddFrostResistanceModal, ListItemCard } from "./index";
+import { AddSunDemandModal, ListItemCard } from "./index";
 import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
-const FrostResistancePage = () => {
-  const [frostResistanceItems, setFrostResistanceItems] = useState();
+const SunDemandsPage = () => {
+  const [sunDemands, setSunDemands] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    let frostResistanceItemList = [];
+    let sunDemandsList = [];
 
-    async function fetchFrostResistanceData() {
-      let frostResistanceResult = await getFirestoreCollectionData(
-        "frostResistanceItems"
-      );
-      if (!frostResistanceResult) setError(true);
-      frostResistanceItemList = frostResistanceResult.map((item, index) => {
+    async function fetchSunDemandsData() {
+      let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
+      if (!sunDemandsResult) setError(true);
+      sunDemandsList = sunDemandsResult.map((item, index) => {
         return <ListItemCard item={item} key={index} />;
       });
-      setFrostResistanceItems(frostResistanceItemList);
+      setSunDemands(sunDemandsList);
     }
 
-    fetchFrostResistanceData()
+    fetchSunDemandsData()
       .then()
       .catch(() => {
         setError(true);
@@ -43,13 +41,13 @@ const FrostResistancePage = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width="eight" floated="left">
-              <Header as="h1">Mrazuvzdornost</Header>
+              <Header as="h1">Nároky na slunce</Header>
             </Grid.Column>
 
             <div className="right floated">
               <SearchInput />
             </div>
-            <AddFrostResistanceModal
+            <AddSunDemandModal
               triggerComponent={
                 <Button color="green" icon="plus" loading={loading} />
               }
@@ -57,11 +55,11 @@ const FrostResistancePage = () => {
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">
-          {frostResistanceItems}
+          {sunDemands}
         </List>
       </Sidebar>
     </>
   );
 };
 
-export default FrostResistancePage;
+export default SunDemandsPage;

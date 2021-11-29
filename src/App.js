@@ -7,14 +7,13 @@ import {
   OverviewPage,
   SizesPage,
   SunDemandsPage,
-  WaterDemandsPage,
   FrostResistancePage,
   LocationsPage,
   CalendarPage,
-  RecordsPage,
   AccountPage,
   SettingsPage,
   RecentPage,
+  WaterDemandsPage,
 } from "./pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PrivateRoute, PublicRoute } from "./components/index";
@@ -33,17 +32,12 @@ const App = () => {
           <PrivateRoute path="/sizes" component={SizesPage} />
           <PrivateRoute path="/sun-demands" component={SunDemandsPage} />
           <PrivateRoute path="/water-demands" component={WaterDemandsPage} />
-          <PrivateRoute
-            path="/frost-resistance"
-            component={FrostResistancePage}
-          />
           <PrivateRoute path="/locations" component={LocationsPage} />
           <PrivateRoute path="/calendar" component={CalendarPage} />
           <PrivateRoute
             path="/frost-resistance"
             component={FrostResistancePage}
           />
-          <PrivateRoute path="/records" component={RecordsPage} />
           <PrivateRoute path="/account" component={AccountPage} />
           <PrivateRoute path="/settings" component={SettingsPage} />
           <PublicRoute path="/" component={HomePage} />

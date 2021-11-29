@@ -55,10 +55,6 @@ const Sidebar = ({ children }) => {
           <i className="calendar alternate icon"></i>
           Kalendář
         </Link>
-        <Link className="item" to="/records">
-          <i className="book icon"></i>
-          Evidence
-        </Link>
         <SidebarFooter>
           <Link to="/account">
             <SidebarFooterItem className="user icon large link"></SidebarFooterItem>

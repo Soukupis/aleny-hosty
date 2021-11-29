@@ -15,12 +15,12 @@ const AddSizeModal = ({ triggerComponent }) => {
       centered
       size="small"
     >
-      <Modal.Header>Přidání velikosti</Modal.Header>
+      <Modal.Header>Přidání polohy</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Form>
             <Form.Group widths="equal">
-              <Form.Field control={Input} label="Velikost" />
+              <Form.Field control={Input} label="Poloha" />
             </Form.Group>
           </Form>
         </Modal.Description>
