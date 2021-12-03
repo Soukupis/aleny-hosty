@@ -31,10 +31,6 @@ const Sidebar = ({ children }) => {
           <i className="th icon"></i>
           Přehled
         </Link>
-        <Link className="item" to="/sizes">
-          <i className="sort numeric up icon"></i>
-          Velikosti
-        </Link>
         <Link className="item" to="/sun-demands">
           <i className="sun icon"></i>
           Nároky na slunce

@@ -18,6 +18,7 @@ const SizesPage = () => {
     async function fetchSizesData() {
       let sizesResult = await getFirestoreCollectionData("sizes");
       if (!sizesResult) setError(true);
+      sizesResult = sizesResult.sort();
       sizesList = sizesResult.map((item, index) => {
         return <ListItemCard item={item} key={index} />;
       });

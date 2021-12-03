@@ -12,6 +12,9 @@ const SunDemandsPage = () => {
   const [sunDemands, setSunDemands] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -21,7 +24,15 @@ const SunDemandsPage = () => {
       let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
       if (!sunDemandsResult) setError(true);
       sunDemandsList = sunDemandsResult.map((item, index) => {
-        return <ListItemCard item={item} key={index} />;
+        return (
+          <ListItemCard
+            item={item}
+            key={index}
+            collection="sunDemands"
+            setRemoving={setRemoving}
+            setEditing={setEditing}
+          />
+        );
       });
       setSunDemands(sunDemandsList);
     }
@@ -32,7 +43,8 @@ const SunDemandsPage = () => {
         setError(true);
       })
       .then(() => setLoading(false));
-  }, []);
+  }, [adding, removing, editing]);
+
   return (
     <>
       {handleError(error)}
@@ -48,9 +60,8 @@ const SunDemandsPage = () => {
               <SearchInput />
             </div>
             <AddSunDemandModal
-              triggerComponent={
-                <Button color="green" icon="plus" loading={loading} />
-              }
+              triggerComponent={<Button color="green" icon="plus" />}
+              setAdding={setAdding}
             />
           </Grid.Row>
         </Grid>

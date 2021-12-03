@@ -6,8 +6,6 @@ import {
   WaterImage,
   IceCubeImage,
   LocationImage,
-  CalendarImage,
-  SizeImage,
   OverviewImage,
   ClockImage,
 } from "../../assets/index";
@@ -30,26 +28,20 @@ const DashboardPage = () => {
             redirectTo={"overview"}
           />
           <Card
-            title="Velikosti"
-            collection="sizes"
-            avatar={SizeImage}
-            redirectTo={"sizes"}
-          />
-          <Card
             title="Nároky na slunce"
-            collection="sun-demands"
+            collection="sunDemands"
             avatar={SunImage}
             redirectTo="sun-demands"
           />
           <Card
             title="Nároky na vláhu"
-            collection="water-demands"
+            collection="waterDemands"
             avatar={WaterImage}
             redirectTo="water-demands"
           />
           <Card
             title="Mrazuvzdornost"
-            collection="frost-resistance-items"
+            collection="frostResistanceItems"
             avatar={IceCubeImage}
             redirectTo="frost-resistance"
           />
@@ -58,12 +50,6 @@ const DashboardPage = () => {
             collection="locations"
             avatar={LocationImage}
             redirectTo="locations"
-          />
-          <Card
-            title="Kalendář"
-            collection="calendar-items"
-            avatar={CalendarImage}
-            redirectTo="calendar"
           />
         </div>
       </Sidebar>

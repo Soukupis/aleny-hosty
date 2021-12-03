@@ -6,7 +6,6 @@ import SunDemandsPage from "./sun-demands/SunDemandsPage";
 import WaterDemandsPage from "./water-demands/WaterDemandsPage";
 import FrostResistancePage from "./frost-resistance/FrostResistancePage";
 import LocationsPage from "./locations/LocationsPage";
-import CalendarPage from "./calendar/CalendarPage";
 import AccountPage from "./account/AccountPage";
 import SettingsPage from "./settings/SettingsPage";
 import LoginPage from "./auth/LoginPage";
@@ -21,7 +20,6 @@ export {
   SunDemandsPage,
   FrostResistancePage,
   LocationsPage,
-  CalendarPage,
   AccountPage,
   SettingsPage,
   RecentPage,

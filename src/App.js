@@ -9,7 +9,6 @@ import {
   SunDemandsPage,
   FrostResistancePage,
   LocationsPage,
-  CalendarPage,
   AccountPage,
   SettingsPage,
   RecentPage,
@@ -29,11 +28,9 @@ const App = () => {
           <PrivateRoute path="/dashboard" component={DashboardPage} />
           <PrivateRoute path="/recents" component={RecentPage} />
           <PrivateRoute path="/overview" component={OverviewPage} />
-          <PrivateRoute path="/sizes" component={SizesPage} />
           <PrivateRoute path="/sun-demands" component={SunDemandsPage} />
           <PrivateRoute path="/water-demands" component={WaterDemandsPage} />
           <PrivateRoute path="/locations" component={LocationsPage} />
-          <PrivateRoute path="/calendar" component={CalendarPage} />
           <PrivateRoute
             path="/frost-resistance"
             component={FrostResistancePage}
