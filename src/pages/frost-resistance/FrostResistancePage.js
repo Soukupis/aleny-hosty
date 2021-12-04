@@ -4,7 +4,6 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
 import { AddFrostResistanceModal, ListItemCard } from "./index";
-import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -45,15 +44,13 @@ const FrostResistancePage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Mrazuvzdornost</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddFrostResistanceModal
-              triggerComponent={
-                <Button color="green" icon="plus" loading={loading} />
-              }
-            />
+            <Grid.Column>
+              <AddFrostResistanceModal
+                triggerComponent={
+                  <Button color="green" icon="plus" loading={loading} />
+                }
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">

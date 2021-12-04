@@ -4,7 +4,6 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
 import { AddLocationModal, ListItemCard } from "./index";
-import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -43,15 +42,13 @@ const SunDemandsPage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Polohy</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddLocationModal
-              triggerComponent={
-                <Button color="green" icon="plus" loading={loading} />
-              }
-            />
+            <Grid.Column>
+              <AddLocationModal
+                triggerComponent={
+                  <Button color="green" icon="plus" loading={loading} />
+                }
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">

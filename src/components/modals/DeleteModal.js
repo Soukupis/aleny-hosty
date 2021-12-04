@@ -11,16 +11,16 @@ const DeleteModal = ({
   setRemoving,
 }) => {
   const [open, setOpen] = useState(false);
-  //setRemoving(true);
 
   const handleDelete = async () => {
     const successful = await deleteDocument(collection, item.id);
     if (successful) {
       setOpen(false);
-      setRemoving(false);
     } else {
       console.log("error");
     }
+    setRemoving(false);
+    console.log("success");
   };
 
   return (

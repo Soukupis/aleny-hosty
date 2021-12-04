@@ -11,7 +11,6 @@ import {
   LocationsPage,
   AccountPage,
   SettingsPage,
-  RecentPage,
   WaterDemandsPage,
 } from "./pages";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -26,7 +25,6 @@ const App = () => {
         <Switch>
           <PublicRoute path="/login" component={LoginPage} />
           <PrivateRoute path="/dashboard" component={DashboardPage} />
-          <PrivateRoute path="/recents" component={RecentPage} />
           <PrivateRoute path="/overview" component={OverviewPage} />
           <PrivateRoute path="/sun-demands" component={SunDemandsPage} />
           <PrivateRoute path="/water-demands" component={WaterDemandsPage} />
@@ -36,6 +34,7 @@ const App = () => {
             component={FrostResistancePage}
           />
           <PrivateRoute path="/account" component={AccountPage} />
+          <PrivateRoute path="/sizes" component={SizesPage} />
           <PrivateRoute path="/settings" component={SettingsPage} />
           <PublicRoute path="/" component={HomePage} />
         </Switch>

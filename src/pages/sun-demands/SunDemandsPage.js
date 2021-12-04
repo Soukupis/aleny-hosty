@@ -4,7 +4,6 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
 import { AddSunDemandModal, ListItemCard } from "./index";
-import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -55,14 +54,12 @@ const SunDemandsPage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Nároky na slunce</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddSunDemandModal
-              triggerComponent={<Button color="green" icon="plus" />}
-              setAdding={setAdding}
-            />
+            <Grid.Column>
+              <AddSunDemandModal
+                triggerComponent={<Button color="green" icon="plus" />}
+                setAdding={setAdding}
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">

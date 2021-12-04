@@ -3,7 +3,6 @@ import { Sidebar } from "../../components";
 import { handleError, handleLoading } from "../../utils/messageUtils";
 import { Button, Grid, Header, List } from "semantic-ui-react";
 import { AddSizeModal, ListItemCard } from "./index";
-import { SearchInput } from "../../components/index.js";
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
 const SizesPage = () => {
@@ -42,13 +41,11 @@ const SizesPage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Velikosti</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddSizeModal
-              triggerComponent={<Button color="green" icon="plus" />}
-            />
+            <Grid.Column>
+              <AddSizeModal
+                triggerComponent={<Button color="green" icon="plus" />}
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         <List divided horizontal size="huge">

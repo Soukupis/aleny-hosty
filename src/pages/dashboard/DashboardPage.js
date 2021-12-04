@@ -7,7 +7,7 @@ import {
   IceCubeImage,
   LocationImage,
   OverviewImage,
-  ClockImage,
+  SizeImage,
 } from "../../assets/index";
 
 const DashboardPage = () => {
@@ -15,12 +15,6 @@ const DashboardPage = () => {
     <>
       <Sidebar>
         <div className="ui link cards">
-          <Card
-            title="Naposledy navštívené"
-            collection="last-visited"
-            avatar={ClockImage}
-            redirectTo={"recents"}
-          />
           <Card
             title="Přehled"
             collection="hostas"
@@ -50,6 +44,12 @@ const DashboardPage = () => {
             collection="locations"
             avatar={LocationImage}
             redirectTo="locations"
+          />
+          <Card
+            title="Velikost"
+            collection="sizes"
+            avatar={SizeImage}
+            redirectTo="sizes"
           />
         </div>
       </Sidebar>

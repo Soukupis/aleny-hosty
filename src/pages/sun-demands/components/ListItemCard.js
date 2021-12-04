@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Formik, setIn } from "formik";
+import React, { useState } from "react";
+import { Formik } from "formik";
 import { Item, Image, Button, Input, Form } from "semantic-ui-react";
 
 import { DeleteModal } from "../../../components/index";
@@ -9,7 +9,6 @@ import { editDocument } from "../../../utils/firebaseUtils";
 
 const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
   const [input, setInput] = useState(false);
-  setEditing(true);
   return (
     <Item>
       <Item.Content className="right floated" style={{ marginTop: "10px" }}>
@@ -18,11 +17,21 @@ const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
           circular
           icon="edit outline"
           color="blue"
-          onClick={() => setInput(!input)}
+          onClick={() => {
+            setInput(!input);
+            setEditing(true);
+          }}
         />
         <DeleteModal
           triggerComponent={
-            <Button size="mini" circular icon="trash" negative item={item} />
+            <Button
+              size="mini"
+              circular
+              icon="trash"
+              negative
+              item={item}
+              onClick={() => setRemoving(true)}
+            />
           }
           text={`Vážně chcete odstranit nárok na slunce ${item?.demand} ?`}
           title="Mazání nároku na slunce"
@@ -54,10 +63,10 @@ const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
                   });
                   if (result) {
                     setInput(false);
-                    setEditing(false);
                   } else {
                     console.log("nm");
                   }
+                  setEditing(false);
                 }}
               >
                 {({

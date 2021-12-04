@@ -3,7 +3,7 @@ import { Grid, List, Header, Button } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
-import { AddHostaModal, ListItemCard, SearchInput } from "./index";
+import { AddHostaModal, ListItemCard } from "./index";
 
 import {
   getFirestoreCollectionData,
@@ -61,19 +61,17 @@ const OverviewPage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Hosty</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddHostaModal
-              sizes={sizes}
-              waterDemands={waterDemands}
-              sunDemands={sunDemands}
-              locations={locations}
-              triggerComponent={
-                <Button color="green" icon="plus" loading={loading} />
-              }
-            />
+            <Grid.Column>
+              <AddHostaModal
+                sizes={sizes}
+                waterDemands={waterDemands}
+                sunDemands={sunDemands}
+                locations={locations}
+                triggerComponent={
+                  <Button color="green" icon="plus" loading={loading} />
+                }
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         <List divided size="huge" verticalAlign="middle">
