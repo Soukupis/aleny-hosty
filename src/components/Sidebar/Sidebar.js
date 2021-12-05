@@ -17,6 +17,8 @@ import {
   Checkbox,
   Select,
   Divider,
+  Menu,
+  Dropdown,
 } from "semantic-ui-react";
 
 const Sidebar = ({ children }) => {
@@ -220,26 +222,33 @@ const Sidebar = ({ children }) => {
                 </Grid.Column>
               </FormRow>
               <Divider clearing />
-              <BottomFormRow>
-                <Grid.Column>
-                  <Form.Field>
-                    <Checkbox
-                      label="Mrazuvzdornost"
-                      onClick={() => setFrostResistance(!frostResistance)}
-                    />
-                  </Form.Field>
-                </Grid.Column>
-              </BottomFormRow>
-              <FormRow>
-                <Grid.Column>
-                  <Form.Field
-                    control={Select}
-                    options={countryOptions}
-                    placeholder="Mrazuvzdornost"
-                    disabled={!frostResistance}
-                  />
-                </Grid.Column>
-              </FormRow>
+              <Grid.Row>
+                <Segment basic style={{ paddingTop: "0px" }}>
+                  <Menu size="large">
+                    <Dropdown
+                      item
+                      text=" Vlastnosti"
+                      style={{ marginTop: "6px" }}
+                    >
+                      <Dropdown.Menu>
+                        <Link to="/locations">
+                          <Dropdown.Item>Poloha</Dropdown.Item>
+                        </Link>
+                        <Link to="/sizes">
+                          <Dropdown.Item>Velikost</Dropdown.Item>
+                        </Link>
+
+                        <Link to="/sun-demands">
+                          <Dropdown.Item>Nároky na slunce</Dropdown.Item>
+                        </Link>
+                        <Link to="/water-demands">
+                          <Dropdown.Item>Nároky na vodu</Dropdown.Item>
+                        </Link>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Menu>
+                </Segment>
+              </Grid.Row>
             </Grid>
           </Form>
         </Segment>
@@ -249,7 +258,7 @@ const Sidebar = ({ children }) => {
           marginLeft: menuWidth,
         }}
       >
-        <Segment basic style={{ marginLeft: "20px" }}>
+        <Segment basic style={{ paddingLeft: "20px" }}>
           {children}
         </Segment>
       </div>

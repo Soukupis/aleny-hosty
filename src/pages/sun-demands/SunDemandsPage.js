@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
@@ -50,11 +50,11 @@ const SunDemandsPage = () => {
       {handleLoading(loading)}
       <Sidebar>
         <Grid>
-          <Grid.Row>
+          <Grid.Row columns={2}>
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Nároky na slunce</Header>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column style={{ textAlign: "right" }}>
               <AddSunDemandModal
                 triggerComponent={<Button color="green" icon="plus" />}
                 setAdding={setAdding}
@@ -62,6 +62,7 @@ const SunDemandsPage = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Divider clearing />
         <List divided size="huge" verticalAlign="middle">
           {sunDemands}
         </List>

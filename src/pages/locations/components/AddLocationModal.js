@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Modal, Button, Input, Form } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
+import { Formik } from "formik";
+import db from "../../../firebase";
 
-const AddSizeModal = ({ triggerComponent }) => {
+const AddSizeModal = ({ triggerComponent, setAdding }) => {
   const [open, setOpen] = useState(false);
-
-  const handleSubmit = () => {};
 
   return (
     <Modal
@@ -18,21 +18,70 @@ const AddSizeModal = ({ triggerComponent }) => {
       <Modal.Header>Přidání polohy</Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          <Form>
-            <Form.Group widths="equal">
-              <Form.Field control={Input} label="Poloha" />
-            </Form.Group>
-          </Form>
+          <Formik
+            initialValues={{ location: "" }}
+            validate={(values) => {
+              const errors = {};
+              if (!values.location) {
+                errors.location = "Pole nesmí být prázdné";
+              }
+              return errors;
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+              setAdding(true);
+              db.firestore()
+                .collection("locations")
+                .doc()
+                .set({
+                  location: values.location,
+                  lastChange: new Date(),
+                })
+                .then((response) => {
+                  setSubmitting(false);
+                  setOpen(false);
+                  setAdding(false);
+                });
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Field
+                    name="location"
+                    control={Input}
+                    label="Poloha"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.location}
+                  />
+                </Form.Group>
+                {errors.location && touched.location && errors.location ? (
+                  <Message negative>
+                    <Message.Header>{errors.location}</Message.Header>
+                  </Message>
+                ) : (
+                  ""
+                )}
+
+                <Button type="submit" disabled={isSubmitting} positive>
+                  Přidat
+                </Button>
+                <Button negative onClick={() => setOpen(false)}>
+                  Zrušit
+                </Button>
+              </Form>
+            )}
+          </Formik>
         </Modal.Description>
       </Modal.Content>
-      <Modal.Actions>
-        <Button negative onClick={() => setOpen(false)}>
-          Zrušit
-        </Button>
-        <Button onClick={() => handleSubmit} positive>
-          Vytvořit
-        </Button>
-      </Modal.Actions>
     </Modal>
   );
 };

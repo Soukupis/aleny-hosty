@@ -11,6 +11,9 @@ const SunDemandsPage = () => {
   const [locations, setLocation] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -20,7 +23,15 @@ const SunDemandsPage = () => {
       let locationsResult = await getFirestoreCollectionData("locations");
       if (!locationsResult) setError(true);
       locationsList = locationsResult.map((item, index) => {
-        return <ListItemCard item={item} key={index} />;
+        return (
+          <ListItemCard
+            item={item}
+            key={index}
+            collection="locations"
+            setRemoving={setRemoving}
+            setEditing={setEditing}
+          />
+        );
       });
       setLocation(locationsList);
     }
@@ -31,7 +42,7 @@ const SunDemandsPage = () => {
         setError(true);
       })
       .then(() => setLoading(false));
-  }, []);
+  }, [adding, removing, editing]);
   return (
     <>
       {handleError(error)}
@@ -47,6 +58,7 @@ const SunDemandsPage = () => {
                 triggerComponent={
                   <Button color="green" icon="plus" loading={loading} />
                 }
+                setAdding={setAdding}
               />
             </Grid.Column>
           </Grid.Row>

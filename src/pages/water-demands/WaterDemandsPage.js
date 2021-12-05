@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
@@ -63,6 +63,7 @@ const WaterDemandsPage = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Divider clearing />
         <List divided size="huge" verticalAlign="middle">
           {waterDemands}
         </List>

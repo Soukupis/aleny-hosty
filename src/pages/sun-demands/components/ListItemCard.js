@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { Item, Image, Button, Input, Form } from "semantic-ui-react";
+import { Item, Image, Button, Input, Form, Message } from "semantic-ui-react";
 
 import { DeleteModal } from "../../../components/index";
 import { SunImage } from "../../../assets/index";
@@ -57,16 +57,17 @@ const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  const result = editDocument("sunDemands", item.id, {
+                  editDocument("sunDemands", item.id, {
                     demand: values.demand,
                     lastChange: new Date(),
-                  });
-                  if (result) {
-                    setInput(false);
-                  } else {
-                    console.log("nm");
-                  }
-                  setEditing(false);
+                  })
+                    .catch((error) => {
+                      console.log(error);
+                    })
+                    .then((response) => {
+                      setInput(false);
+                      setEditing(false);
+                    });
                 }}
               >
                 {({
@@ -76,27 +77,36 @@ const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
-                  isSubmitting,
                 }) => (
                   <Form onSubmit={handleSubmit}>
-                    <Form.Field
-                      size="mini"
-                      name="demand"
-                      control={Input}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.demand}
-                    />
+                    <Form.Group>
+                      <Form.Field
+                        size="small"
+                        name="demand"
+                        control={Input}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.demand}
+                        focus
+                      />
+                      {errors.demand && touched.demand && errors.demand ? (
+                        <Message
+                          negative
+                          style={{ marginTop: "0px" }}
+                          size="mini"
+                        >
+                          <Message.Header>{errors.demand}</Message.Header>
+                        </Message>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
                   </Form>
                 )}
               </Formik>
             </>
           )}
         </Item.Header>
-
-        <span style={{ fontSize: "12px" }}>
-          Poslední změna: {item?.lastChange?.toDate().toDateString()}
-        </span>
       </Item.Content>
     </Item>
   );

@@ -3,10 +3,8 @@ import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddSizeModal = ({ triggerComponent }) => {
+const AddSizeModal = ({ triggerComponent, setAdding }) => {
   const [open, setOpen] = useState(false);
-
-  const handleSubmit = () => {};
 
   useEffect(() => {});
 
@@ -29,18 +27,24 @@ const AddSizeModal = ({ triggerComponent }) => {
               if (!values.size) {
                 errors.size = "Pole nesmí být prázdné";
               }
+              if (!/^[0-9]*$/.test(values.size)) {
+                errors.size = "Pole musí obsahovat pouze číslice";
+              }
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
+              setAdding(true);
               db.firestore()
                 .collection("sizes")
                 .doc()
                 .set({
                   size: values.size,
+                  lastChange: new Date(),
                 })
                 .then((response) => {
-                  console.log(response);
                   setSubmitting(false);
+                  setOpen(false);
+                  setAdding(false);
                 });
             }}
           >
@@ -84,14 +88,6 @@ const AddSizeModal = ({ triggerComponent }) => {
           </Formik>
         </Modal.Description>
       </Modal.Content>
-      <Modal.Actions>
-        <Button negative onClick={() => setOpen(false)}>
-          Zrušit
-        </Button>
-        <Button onClick={() => handleSubmit} positive>
-          Vytvořit
-        </Button>
-      </Modal.Actions>
     </Modal>
   );
 };

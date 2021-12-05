@@ -11,7 +11,7 @@ const PublicRoute = ({ component: Component, ...rest }) => {
         return !currentUser ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/dashboard" />
+          <Redirect to="/overview" />
         );
       }}
     ></Route>

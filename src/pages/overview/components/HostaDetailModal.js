@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Button, Image, Modal } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 import {
   LeafImage,
   LocationImage,
   WaterImage,
   SunImage,
   SizeImage,
-  IceCubeImage,
   ClockImage,
+  ColorImage,
 } from "../../../assets/index";
 import ImageModal from "./ImageModal";
 import ModalCard from "./ModalCard";
@@ -23,12 +23,7 @@ const HostaDetailModal = ({ triggerComponent, item }) => {
       trigger={triggerComponent}
     >
       <Modal.Header>
-        {item?.name}
-        {item?.frostResistance ? (
-          <Image floated="right" size="mini" src={IceCubeImage} />
-        ) : (
-          ""
-        )}
+        {item?.name} ({item?.latinName})
       </Modal.Header>
       <Modal.Content image>
         <ImageModal image={item?.image ? item?.image : LeafImage} />
@@ -45,7 +40,7 @@ const HostaDetailModal = ({ triggerComponent, item }) => {
               subtitile="Velikost"
             />
             <ModalCard
-              icon={WaterImage}
+              icon={ColorImage}
               title={item?.color}
               subtitile="Barva"
             />

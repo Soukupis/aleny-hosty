@@ -57,11 +57,11 @@ const OverviewPage = () => {
       {handleLoading(loading)}
       <Sidebar>
         <Grid>
-          <Grid.Row>
-            <Grid.Column width="eight" floated="left">
+          <Grid.Row columns={2}>
+            <Grid.Column>
               <Header as="h1">Hosty</Header>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column style={{ textAlign: "right" }}>
               <AddHostaModal
                 sizes={sizes}
                 waterDemands={waterDemands}
