@@ -19,53 +19,75 @@ import {
   Divider,
   Menu,
   Dropdown,
+  Modal,
+  Button,
 } from "semantic-ui-react";
 
+import {
+  getFirestoreCollectionData,
+  getDropdownItemArray,
+} from "../../utils/firebaseUtils";
+import { handleLoading } from "../../utils/messageUtils";
+
 const Sidebar = ({ children }) => {
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [menuWidth, setMenuWidth] = useState();
   const [latinName, setLatinName] = useState(false);
   const [czechName, setCzechName] = useState(false);
   const [sunDemands, setSunDemands] = useState(false);
   const [waterDemands, setWaterDemands] = useState(false);
   const [location, setLocation] = useState(false);
-  const [frostResistance, setFrostResistance] = useState(false);
   const [size, setSize] = useState(false);
-  const [sizeRangeStart, setSizeRangeStart] = useState(false);
-  const [sizeRangeEnd, setSizeRangeEnd] = useState(false);
-  const countryOptions = [
-    { key: "af", value: "af", text: "Afghanistan" },
-    { key: "ax", value: "ax", text: "Aland Islands" },
-    { key: "al", value: "al", text: "Albania" },
-    { key: "dz", value: "dz", text: "Algeria" },
-    { key: "as", value: "as", text: "American Samoa" },
-    { key: "ad", value: "ad", text: "Andorra" },
-    { key: "ao", value: "ao", text: "Angola" },
-    { key: "ai", value: "ai", text: "Anguilla" },
-    { key: "ag", value: "ag", text: "Antigua" },
-    { key: "ar", value: "ar", text: "Argentina" },
-    { key: "am", value: "am", text: "Armenia" },
-    { key: "aw", value: "aw", text: "Aruba" },
-    { key: "au", value: "au", text: "Australia" },
-    { key: "at", value: "at", text: "Austria" },
-    { key: "az", value: "az", text: "Azerbaijan" },
-    { key: "bs", value: "bs", text: "Bahamas" },
-    { key: "bh", value: "bh", text: "Bahrain" },
-    { key: "bd", value: "bd", text: "Bangladesh" },
-    { key: "bb", value: "bb", text: "Barbados" },
-    { key: "by", value: "by", text: "Belarus" },
-    { key: "be", value: "be", text: "Belgium" },
-    { key: "bz", value: "bz", text: "Belize" },
-    { key: "bj", value: "bj", text: "Benin" },
-  ];
+  const [sunDemandsSelectList, setSunDemandsSelectList] = useState([]);
+  const [waterDemandsSelectList, setWaterDemandsSelectList] = useState([]);
+  const [locationsSelectList, setLocationsDemandsSelectList] = useState([]);
+
   useEffect(() => {
+    setLoading(true);
     setMenuWidth(document.getElementsByClassName("menu")[0].clientWidth);
+
+    async function fetchCollectionData() {
+      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
+      if (!waterDemandsResult) setError("Načtení dat se nezdařilo");
+      let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
+      if (!sunDemandsResult) setError("Načtení dat se nezdařilo");
+      let locationsResult = await getFirestoreCollectionData("locations");
+      if (!locationsResult) setError("Načtení dat se nezdařilo");
+      setWaterDemandsSelectList(
+        getDropdownItemArray("demand", waterDemandsResult)
+      );
+      setSunDemandsSelectList(getDropdownItemArray("demand", sunDemandsResult));
+      setLocationsDemandsSelectList(
+        getDropdownItemArray("location", locationsResult)
+      );
+    }
+
+    fetchCollectionData()
+      .then()
+      .catch((error) => {
+        setError(true);
+      })
+      .then(() => setLoading(false));
   }, []);
-  const openEmailClient = (e) => {
-    window.location = "mailto:joseph.soukup@outlook.com";
-    e.preventDefault();
-  };
   return (
     <>
+      {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <div
         id="top-menu"
         className="ui left fixed vertical menu hidden huge"
@@ -142,7 +164,7 @@ const Sidebar = ({ children }) => {
                 <Grid.Column>
                   <Form.Field
                     control={Select}
-                    options={countryOptions}
+                    options={sunDemandsSelectList}
                     placeholder="Nárok na slunce"
                     disabled={!sunDemands}
                   />
@@ -162,7 +184,7 @@ const Sidebar = ({ children }) => {
                 <Grid.Column>
                   <Form.Field
                     control={Select}
-                    options={countryOptions}
+                    options={waterDemandsSelectList}
                     placeholder="Nárok na vodu"
                     disabled={!waterDemands}
                   />
@@ -183,17 +205,15 @@ const Sidebar = ({ children }) => {
                 <Grid.Column>
                   <Form.Field
                     control={Input}
-                    options={countryOptions}
                     placeholder="min"
-                    disabled={!sizeRangeStart}
+                    disabled={!size}
                   />
                 </Grid.Column>
                 <Grid.Column>
                   <Form.Field
                     control={Input}
-                    options={countryOptions}
                     placeholder="max"
-                    disabled={!sizeRangeEnd}
+                    disabled={!size}
                   />
                 </Grid.Column>
               </FormRow>
@@ -215,7 +235,7 @@ const Sidebar = ({ children }) => {
                 <Grid.Column>
                   <Form.Field
                     control={Select}
-                    options={countryOptions}
+                    options={locationsSelectList}
                     placeholder="Poloha"
                     disabled={!location}
                   />
@@ -266,83 +286,3 @@ const Sidebar = ({ children }) => {
   );
 };
 export default Sidebar;
-
-/*
-* <Segment>
-          <SidebarFooter>
-            <Link to="/account">
-              <SidebarFooterItem className="user icon large link"></SidebarFooterItem>
-            </Link>
-            <Link to="/settings">
-              <SidebarFooterItem className="settings icon large link"></SidebarFooterItem>
-            </Link>
-            <Link to="/email">
-              <SidebarFooterItem
-                className="paper plane icon large link"
-                onClick={openEmailClient}
-              ></SidebarFooterItem>
-            </Link>
-            <LogoutButton />
-          </SidebarFooter>
-        </Segment>*/
-
-/*
-*
-*
-    <div id="top-menu" className="ui left fixed vertical menu">
-        <Link to="/dashboard">
-            <SidebarHeader className="item">
-                <img className="ui mini image" alt="logo" src={LeafImage}/>
-                <HeaderTitle>Aleny Hosty</HeaderTitle>
-            </SidebarHeader>
-        </Link>
-        <Link className="item" to="/overview">
-            <i className="th icon"></i>
-            Přehled
-        </Link>
-        <Link className="item" to="/sun-demands">
-            <i className="sun icon"></i>
-            Nároky na slunce
-        </Link>
-        <Link className="item" to="/water-demands">
-            <i className="tint icon"></i>
-            Nároky na vláhu
-        </Link>
-        <Link className="item" to="/frost-resistance">
-            <i className="snowflake icon"></i>
-            Mrazuvzdornost
-        </Link>
-        <Link className="item" to="/locations">
-            <i className="map icon"></i>
-            Umístění
-        </Link>
-        <Link className="item" to="/calendar">
-            <i className="calendar alternate icon"></i>
-            Kalendář
-        </Link>
-        <SidebarFooter>
-            <Link to="/account">
-                <SidebarFooterItem
-                    className="user icon large link"></SidebarFooterItem>
-            </Link>
-            <Link to="/settings">
-                <SidebarFooterItem
-                    className="settings icon large link"></SidebarFooterItem>
-            </Link>
-            <Link to="/email">
-                <SidebarFooterItem
-                    className="paper plane icon large link"
-                    onClick={openEmailClient}
-                ></SidebarFooterItem>
-            </Link>
-            <LogoutButton/>
-        </SidebarFooter>
-    </div>
-    <div
-        style={{
-            marginLeft: menuWidth,
-        }}
-    >
-        <div className="ui basic segment">{children}</div>
-    </div>
-*/

@@ -7,7 +7,13 @@ import { SunImage } from "../../../assets/index";
 
 import { editDocument } from "../../../utils/firebaseUtils";
 
-const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
+const ListItemCard = ({
+  item,
+  collection,
+  setRemoving,
+  setEditing,
+  setError,
+}) => {
   const [input, setInput] = useState(false);
   return (
     <Item>
@@ -62,7 +68,7 @@ const ListItemCard = ({ item, collection, setRemoving, setEditing }) => {
                     lastChange: new Date(),
                   })
                     .catch((error) => {
-                      console.log(error);
+                      setError(error);
                     })
                     .then((response) => {
                       setInput(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../components";
-import { handleError, handleLoading } from "../../utils/messageUtils";
-import { Button, Divider, Grid, Header, List } from "semantic-ui-react";
+import { handleLoading } from "../../utils/messageUtils";
+import { Button, Divider, Grid, Header, List, Modal } from "semantic-ui-react";
 import { AddSizeModal, ListItemCard } from "./index";
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -19,7 +19,7 @@ const SizesPage = () => {
 
     async function fetchSizesData() {
       let sizesResult = await getFirestoreCollectionData("sizes");
-      if (!sizesResult) setError(true);
+      if (!sizesResult) setError("Načtení dat se nezdařilo");
       sizesResult = sizesResult.sort();
       sizesList = sizesResult.map((item, index) => {
         return (
@@ -29,6 +29,7 @@ const SizesPage = () => {
             collection="sizes"
             setRemoving={setRemoving}
             setEditing={setEditing}
+            setError={setError}
           />
         );
       });
@@ -36,16 +37,29 @@ const SizesPage = () => {
     }
 
     fetchSizesData()
-      .then()
-      .catch(() => {
-        setError(true);
+      .catch((error) => {
+        setError(error);
       })
       .then(() => setLoading(false));
   }, [adding, removing, editing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row columns={2}>
@@ -56,6 +70,7 @@ const SizesPage = () => {
               <AddSizeModal
                 triggerComponent={<Button color="green" icon="plus" />}
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>

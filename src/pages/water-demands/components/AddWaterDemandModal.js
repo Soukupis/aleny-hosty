@@ -3,7 +3,7 @@ import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddWaterDemandModal = ({ triggerComponent, setAdding }) => {
+const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
   const [open, setOpen] = useState(false);
   return (
     <Modal
@@ -34,6 +34,9 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding }) => {
                 .set({
                   demand: values.waterDemand,
                   lastChange: new Date(),
+                })
+                .catch((error) => {
+                  setError(error);
                 })
                 .then((response) => {
                   setSubmitting(false);

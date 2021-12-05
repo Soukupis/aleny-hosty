@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
-import { handleLoading, handleError } from "../../utils/messageUtils";
+import { handleLoading } from "../../utils/messageUtils";
 import { AddWaterDemandModal, ListItemCard } from "./index";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
@@ -30,6 +30,7 @@ const WaterDemandsPage = () => {
             collection="waterDemands"
             setRemoving={setRemoving}
             setEditing={setEditing}
+            setError={setError}
           />
         );
       });
@@ -37,16 +38,29 @@ const WaterDemandsPage = () => {
     }
 
     fetchWaterDemandsData()
-      .then()
-      .catch(() => {
-        setError(true);
+      .catch((error) => {
+        setError(error);
       })
       .then(() => setLoading(false));
   }, [adding, removing, editing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row>
@@ -59,6 +73,7 @@ const WaterDemandsPage = () => {
                   <Button color="green" icon="plus" loading={loading} />
                 }
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>

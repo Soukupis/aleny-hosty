@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimmer, Loader } from "semantic-ui-react";
+import { Dimmer, Loader, Message } from "semantic-ui-react";
 
 export const handleLoading = (loading) => {
   return loading ? (
@@ -10,5 +10,11 @@ export const handleLoading = (loading) => {
 };
 
 export const handleError = (error) => {
-  return "";
+  console.log("error");
+  return error ? (
+    <Message negative>
+      <Message.Header>We're sorry we can't apply that discount</Message.Header>
+      <p>That offer has expired</p>
+    </Message>
+  ) : null;
 };

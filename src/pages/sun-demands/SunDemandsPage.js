@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
-import { handleLoading, handleError } from "../../utils/messageUtils";
+import { handleLoading } from "../../utils/messageUtils";
 import { AddSunDemandModal, ListItemCard } from "./index";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
@@ -21,7 +21,7 @@ const SunDemandsPage = () => {
 
     async function fetchSunDemandsData() {
       let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
-      if (!sunDemandsResult) setError(true);
+      if (!sunDemandsResult) setError("Načtení dat se nezdařilo");
       sunDemandsList = sunDemandsResult.map((item, index) => {
         return (
           <ListItemCard
@@ -30,6 +30,7 @@ const SunDemandsPage = () => {
             collection="sunDemands"
             setRemoving={setRemoving}
             setEditing={setEditing}
+            setError={setError}
           />
         );
       });
@@ -37,17 +38,30 @@ const SunDemandsPage = () => {
     }
 
     fetchSunDemandsData()
-      .then()
-      .catch(() => {
-        setError(true);
+      .catch((error) => {
+        setError(error);
       })
       .then(() => setLoading(false));
   }, [adding, removing, editing]);
 
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row columns={2}>
@@ -58,6 +72,7 @@ const SunDemandsPage = () => {
               <AddSunDemandModal
                 triggerComponent={<Button color="green" icon="plus" />}
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>
