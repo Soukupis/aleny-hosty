@@ -1,29 +1,21 @@
 import HomePage from "./home/HomePage";
-import DashboardPage from "./dashboard/DashboardPage";
 import OverviewPage from "./overview/OverviewPage";
 import SizesPage from "./sizes/SizesPage";
 import SunDemandsPage from "./sun-demands/SunDemandsPage";
 import WaterDemandsPage from "./water-demands/WaterDemandsPage";
-import FrostResistancePage from "./frost-resistance/FrostResistancePage";
 import LocationsPage from "./locations/LocationsPage";
-import CalendarPage from "./calendar/CalendarPage";
 import AccountPage from "./account/AccountPage";
 import SettingsPage from "./settings/SettingsPage";
 import LoginPage from "./auth/LoginPage";
-import RecentPage from "./recents/RecentPage";
 
 export {
   HomePage,
-  DashboardPage,
   LoginPage,
   OverviewPage,
   SizesPage,
   SunDemandsPage,
-  FrostResistancePage,
   LocationsPage,
-  CalendarPage,
   AccountPage,
   SettingsPage,
-  RecentPage,
   WaterDemandsPage,
 };

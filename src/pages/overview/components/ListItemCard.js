@@ -6,6 +6,7 @@ import HostaDetailModel from "./HostaDetailModal";
 import { LeafImage } from "../../../assets/index";
 
 const ListItemCard = ({ item }) => {
+  console.log(item);
   return (
     <Item>
       <Item.Content className="right floated" style={{ marginTop: "10px" }}>
@@ -27,9 +28,7 @@ const ListItemCard = ({ item }) => {
       <Image size="mini" src={LeafImage} alt="avatar" />
       <Item.Content>
         <Item.Header>{item?.name}</Item.Header>
-        <span style={{ fontSize: "12px" }}>
-          Poslední změna: {item?.lastChange?.toDate().toDateString()}
-        </span>
+        <span style={{ fontSize: "12px" }}>{item?.latinName}</span>
       </Item.Content>
     </Item>
   );

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
 import { AddWaterDemandModal, ListItemCard } from "./index";
-import { SearchInput } from "../../components/index.js";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -12,6 +11,9 @@ const WaterDemandsPage = () => {
   const [waterDemands, setWaterDemands] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -21,7 +23,15 @@ const WaterDemandsPage = () => {
       let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
       if (!waterDemandsResult) setError(true);
       waterDemandsList = waterDemandsResult.map((item, index) => {
-        return <ListItemCard item={item} key={index} />;
+        return (
+          <ListItemCard
+            item={item}
+            key={index}
+            collection="waterDemands"
+            setRemoving={setRemoving}
+            setEditing={setEditing}
+          />
+        );
       });
       setWaterDemands(waterDemandsList);
     }
@@ -32,7 +42,7 @@ const WaterDemandsPage = () => {
         setError(true);
       })
       .then(() => setLoading(false));
-  }, []);
+  }, [adding, removing, editing]);
   return (
     <>
       {handleError(error)}
@@ -43,17 +53,17 @@ const WaterDemandsPage = () => {
             <Grid.Column width="eight" floated="left">
               <Header as="h1">Nároky na vláhu</Header>
             </Grid.Column>
-
-            <div className="right floated">
-              <SearchInput />
-            </div>
-            <AddWaterDemandModal
-              triggerComponent={
-                <Button color="green" icon="plus" loading={loading} />
-              }
-            />
+            <Grid.Column>
+              <AddWaterDemandModal
+                triggerComponent={
+                  <Button color="green" icon="plus" loading={loading} />
+                }
+                setAdding={setAdding}
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Divider clearing />
         <List divided size="huge" verticalAlign="middle">
           {waterDemands}
         </List>

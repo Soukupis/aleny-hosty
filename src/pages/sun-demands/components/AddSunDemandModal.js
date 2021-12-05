@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Modal, Button, Input, Form } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
+import { Formik } from "formik";
+import db from "../../../firebase";
 
-const AddSunDemandModal = ({ triggerComponent }) => {
+const AddSunDemandModal = ({ triggerComponent, setAdding }) => {
   const [open, setOpen] = useState(false);
-  const handleSubmit = () => {};
+
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -16,21 +18,70 @@ const AddSunDemandModal = ({ triggerComponent }) => {
       <Modal.Header>Přidání nároku na slunce</Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          <Form>
-            <Form.Group widths="equal">
-              <Form.Field control={Input} label="Nárok na slunce" />
-            </Form.Group>
-          </Form>
+          <Formik
+            initialValues={{ sunDemand: "" }}
+            validate={(values) => {
+              const errors = {};
+              if (!values.sunDemand) {
+                errors.sunDemand = "Pole nesmí být prázdné";
+              }
+              return errors;
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+              setAdding(true);
+              db.firestore()
+                .collection("sunDemands")
+                .doc()
+                .set({
+                  demand: values.sunDemand,
+                  lastChange: new Date(),
+                })
+                .then((response) => {
+                  setSubmitting(false);
+                  setOpen(false);
+                  setAdding(false);
+                });
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group widths="equal">
+                  <Form.Field
+                    name="sunDemand"
+                    control={Input}
+                    label="Nárok na slunce"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.size}
+                  />
+                </Form.Group>
+                {errors.sunDemand && touched.sunDemand && errors.sunDemand ? (
+                  <Message negative>
+                    <Message.Header>{errors.sunDemand}</Message.Header>
+                  </Message>
+                ) : (
+                  ""
+                )}
+
+                <Button type="submit" disabled={isSubmitting} positive>
+                  Přidat
+                </Button>
+                <Button negative onClick={() => setOpen(false)}>
+                  Zrušit
+                </Button>
+              </Form>
+            )}
+          </Formik>
         </Modal.Description>
       </Modal.Content>
-      <Modal.Actions>
-        <Button negative onClick={() => setOpen(false)}>
-          Zrušit
-        </Button>
-        <Button onClick={() => handleSubmit} positive>
-          Vytvořit
-        </Button>
-      </Modal.Actions>
     </Modal>
   );
 };
