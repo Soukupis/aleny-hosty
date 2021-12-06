@@ -23,6 +23,9 @@ const OverviewPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  const [images, setImages] = useState([]);
+  const [urls, setUrls] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     let hostaList = [];
@@ -66,6 +69,7 @@ const OverviewPage = () => {
       })
       .then(() => setLoading(false));
   }, [adding, editing, removing]);
+
   return (
     <>
       {handleLoading(loading)}

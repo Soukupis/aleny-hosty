@@ -1,4 +1,4 @@
-import db from "../firebase";
+import db, { storage } from "../firebase";
 
 export async function getFirestoreCollectionData(collection) {
   let fetchError = false;
@@ -57,4 +57,38 @@ export function getDropdownItemArray(propName, collection) {
     });
   });
   return array;
+}
+
+async function getImageNames(registrationNumber) {
+  let namesList = [];
+  await storage
+    .ref(`images/`)
+    .child(`${registrationNumber}/`)
+    .listAll()
+    .then((res) => {
+      namesList = res.items.map((item) => {
+        return item.name;
+      });
+    })
+    .catch(() => {
+      console.log("error");
+    });
+  return namesList;
+}
+
+export async function getImages(registrationNumber) {
+  let imageNames = await getImageNames(registrationNumber);
+  let imageList = [];
+  const requests = imageNames.map(async (image) => {
+    await storage
+      .ref(`images/${registrationNumber}/`)
+      .child(image)
+      .getDownloadURL()
+      .then((res) => {
+        imageList.push(res);
+      });
+  });
+  return Promise.all(requests).then(() => {
+    return imageList;
+  });
 }

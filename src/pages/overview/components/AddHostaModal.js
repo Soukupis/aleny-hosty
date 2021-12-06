@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  Button,
-  Input,
-  Form,
-  Select,
-  Checkbox,
-} from "semantic-ui-react";
-import db from "../../../firebase";
+import { Modal, Button, Input, Form, Select } from "semantic-ui-react";
+import db, { storage } from "../../../firebase";
 
 import { Formik } from "formik";
 
@@ -22,6 +15,44 @@ const AddHostaModal = ({
   setError,
 }) => {
   const [open, setOpen] = useState(false);
+
+  const [images, setImages] = useState([]);
+  const [urls, setUrls] = useState([]);
+
+  const handleImageChange = (e) => {
+    for (let i = 0; i < e.target.files.length; i++) {
+      const newImage = e.target.files[i];
+      newImage["id"] = Math.random();
+      setImages((images) => [...images, newImage]);
+    }
+  };
+
+  const handleUpload = (registrationNumber) => {
+    const promises = [];
+    images.map((images) => {
+      const uploadTask = storage
+        .ref(`images/${registrationNumber}/${images.name}`)
+        .put(images);
+      promises.push(uploadTask);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          setError(error);
+        },
+        async () => {
+          await storage
+            .ref(`images/${registrationNumber}`)
+            .child(images.name)
+            .getDownloadURL()
+            .then((urls) => {
+              setUrls((prev) => [...prev, urls]);
+            });
+        }
+      );
+    });
+    Promise.all(promises).catch((error) => setError(error));
+  };
   return (
     <>
       <Modal
@@ -82,6 +113,7 @@ const AddHostaModal = ({
               }}
               onSubmit={(values, { setSubmitting }) => {
                 setAdding(true);
+                handleUpload(values.registrationNumber);
                 db.firestore()
                   .collection("hostas")
                   .doc()
@@ -211,6 +243,17 @@ const AddHostaModal = ({
                         value={values.buyDate}
                       />
                     </Form.Group>
+                    <Form.Group>
+                      <Form.Field>
+                        <Input
+                          label="Fotky"
+                          type="file"
+                          multiple
+                          onChange={handleImageChange}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+
                     <Button type="submit" disabled={isSubmitting} positive>
                       Submit
                     </Button>
