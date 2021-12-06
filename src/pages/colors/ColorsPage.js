@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Sidebar } from "../../components";
+import React, { useEffect, useState } from "react";
+import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
+import AddColorModal from "./components/AddColorModal";
+import ListItemCard from "./components/ListItemCard";
 import { handleLoading } from "../../utils/messageUtils";
 import { Button, Divider, Grid, Header, List, Modal } from "semantic-ui-react";
-import { AddSizeModal, ListItemCard } from "./index";
-import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
+import { Sidebar } from "../../components";
 
-const SizesPage = () => {
-  const [sizes, setSizes] = useState();
+const ColorsPage = () => {
+  const [colors, setColors] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -15,26 +16,25 @@ const SizesPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    let sizesList = [];
+    let colorsList = [];
 
     async function fetchSizesData() {
-      let sizesResult = await getFirestoreCollectionData("sizes");
-      if (!sizesResult) setError("Načtení dat se nezdařilo");
-      sizesResult = sizesResult.sort(function (a, b) {
-        return a.size - b.size;
-      });
-      console.log(sizesResult);
-      sizesList = sizesResult.map((item, index) => {
+      let colorsResult = await getFirestoreCollectionData("colors");
+      if (!colorsResult) setError("Načtení dat se nezdařilo");
+      colorsResult = colorsResult.sort();
+      colorsList = colorsResult.map((item, index) => {
         return (
           <ListItemCard
             item={item}
             key={index}
-            collection="sizes"
+            collection="colors"
             setRemoving={setRemoving}
+            setEditing={setEditing}
+            setError={setError}
           />
         );
       });
-      setSizes(sizesList);
+      setColors(colorsList);
     }
 
     fetchSizesData()
@@ -65,10 +65,10 @@ const SizesPage = () => {
         <Grid>
           <Grid.Row columns={2}>
             <Grid.Column width="eight" floated="left">
-              <Header as="h1">Velikosti</Header>
+              <Header as="h1">Barvy</Header>
             </Grid.Column>
             <Grid.Column style={{ textAlign: "right" }}>
-              <AddSizeModal
+              <AddColorModal
                 triggerComponent={<Button color="green" icon="plus" />}
                 setAdding={setAdding}
                 setError={setError}
@@ -78,11 +78,10 @@ const SizesPage = () => {
         </Grid>
         <Divider clearing />
         <List divided size="huge" verticalAlign="middle">
-          {sizes}
+          {colors}
         </List>
       </Sidebar>
     </>
   );
 };
-
-export default SizesPage;
+export default ColorsPage;

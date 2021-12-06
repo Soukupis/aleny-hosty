@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Item, Image, Form, Input, Message } from "semantic-ui-react";
 import { DeleteModal } from "../../../components/index";
-import { SizeImage } from "../../../assets";
+import { ColorImage, SizeImage } from "../../../assets";
 import { Formik } from "formik";
 import { editDocument } from "../../../utils/firebaseUtils";
 
@@ -37,35 +37,35 @@ const ListItemCard = ({
               onClick={() => setRemoving(true)}
             />
           }
-          text={`Vážně chcete odstranit velikost ${item?.size}cm`}
-          title="Mazání velikosti"
+          text={`Vážně chcete odstranit barvu ${item?.color}`}
+          title="Mazání barvy"
           collection={collection}
           item={item}
           setRemoving={setRemoving}
         />
       </Item.Content>
-      <Image size="mini" src={SizeImage} alt="avatar" />
+      <Image size="mini" src={ColorImage} alt="avatar" />
       <Item.Content>
         <Item.Header>
           {!input ? (
-            `${item?.size} cm`
+            `${item?.color}`
           ) : (
             <>
               <Formik
-                initialValues={{ size: item?.size }}
+                initialValues={{ color: item?.color }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.size) {
-                    errors.size = "Pole nesmí být prázdné";
+                  if (!values.color) {
+                    errors.color = "Pole nesmí být prázdné";
                   }
-                  if (!/^[0-9]*$/.test(values.size)) {
-                    errors.size = "Pole musí obsahovat pouze číslice";
+                  if (/^[0-9]*$/.test(values.color)) {
+                    errors.color = "Pole nesmí obsahovat číslice";
                   }
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  editDocument("sizes", item.id, {
-                    size: values.size,
+                  editDocument("colors", item.id, {
+                    color: values.color,
                     lastChange: new Date(),
                   })
                     .catch((error) => {
@@ -90,20 +90,20 @@ const ListItemCard = ({
                     <Form.Group>
                       <Form.Field
                         size="small"
-                        name="size"
+                        name="color"
                         control={Input}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.size}
+                        value={values.color}
                         focus
                       />
-                      {errors.size && touched.size && errors.size ? (
+                      {errors.color && touched.color && errors.color ? (
                         <Message
                           negative
                           style={{ marginTop: "0px" }}
                           size="mini"
                         >
-                          <Message.Header>{errors.size}</Message.Header>
+                          <Message.Header>{errors.color}</Message.Header>
                         </Message>
                       ) : (
                         ""

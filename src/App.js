@@ -10,6 +10,7 @@ import {
   AccountPage,
   SettingsPage,
   WaterDemandsPage,
+  ColorsPage,
 } from "./pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PrivateRoute, PublicRoute } from "./components/index";
@@ -28,6 +29,7 @@ const App = () => {
           <PrivateRoute path="/locations" component={LocationsPage} />
           <PrivateRoute path="/account" component={AccountPage} />
           <PrivateRoute path="/sizes" component={SizesPage} />
+          <PrivateRoute path="/colors" component={ColorsPage} />
           <PrivateRoute path="/settings" component={SettingsPage} />
           <PublicRoute path="/" component={HomePage} />
         </Switch>

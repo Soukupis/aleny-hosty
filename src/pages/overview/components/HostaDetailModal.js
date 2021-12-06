@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal } from "semantic-ui-react";
+import { Button, Modal, Grid } from "semantic-ui-react";
 import {
   LeafImage,
   LocationImage,
@@ -23,8 +23,18 @@ const HostaDetailModal = ({ triggerComponent, item }) => {
       trigger={triggerComponent}
     >
       <Modal.Header>
-        {item?.name} ({item?.latinName})
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              {item?.name} ({item?.latinName})
+            </Grid.Column>
+            <Grid.Column textAlign="right">
+              {item?.registrationNumber}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Modal.Header>
+
       <Modal.Content image>
         <ImageModal image={item?.image ? item?.image : LeafImage} />
         <Modal.Description>
@@ -40,19 +50,19 @@ const HostaDetailModal = ({ triggerComponent, item }) => {
               subtitile="Velikost"
             />
             <ModalCard
-              icon={ColorImage}
-              title={item?.color}
-              subtitile="Barva"
-            />
-            <ModalCard
               icon={SunImage}
-              title={item?.sunDemands}
+              title={item?.sunDemand}
               subtitile="Nároky na slunce"
             />
             <ModalCard
               icon={WaterImage}
-              title={item?.waterDemands}
+              title={item?.waterDemand}
               subtitile="Nároky na vodu"
+            />
+            <ModalCard
+              icon={ColorImage}
+              title={item?.color}
+              subtitile="Barva"
             />
             <ModalCard
               icon={ClockImage}

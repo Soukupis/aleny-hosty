@@ -64,7 +64,6 @@ const Sidebar = ({ children }) => {
     }
 
     fetchCollectionData()
-      .then()
       .catch((error) => {
         setError(true);
       })
@@ -257,7 +256,9 @@ const Sidebar = ({ children }) => {
                         <Link to="/sizes">
                           <Dropdown.Item>Velikost</Dropdown.Item>
                         </Link>
-
+                        <Link to="/colors">
+                          <Dropdown.Item>Barvy</Dropdown.Item>
+                        </Link>
                         <Link to="/sun-demands">
                           <Dropdown.Item>Nároky na slunce</Dropdown.Item>
                         </Link>

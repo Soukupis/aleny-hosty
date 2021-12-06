@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button } from "semantic-ui-react";
+import { Grid, List, Header, Button, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading, handleError } from "../../utils/messageUtils";
@@ -16,8 +16,12 @@ const OverviewPage = () => {
   const [waterDemands, setWaterDemands] = useState([]);
   const [sunDemands, setSunDemands] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [colors, setColors] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -27,7 +31,16 @@ const OverviewPage = () => {
       let hostasResult = await getFirestoreCollectionData("hostas");
       if (!hostasResult) setError(true);
       hostaList = hostasResult.map((item, index) => {
-        return <ListItemCard item={item} key={index} />;
+        return (
+          <ListItemCard
+            item={item}
+            key={index}
+            collection="hostas"
+            setRemoving={setRemoving}
+            setEditing={setEditing}
+            setError={setError}
+          />
+        );
       });
       let sizesResult = await getFirestoreCollectionData("sizes");
       if (!sizesResult) setError(true);
@@ -37,24 +50,40 @@ const OverviewPage = () => {
       if (!sunDemandsResult) setError(true);
       let locationsResult = await getFirestoreCollectionData("locations");
       if (!locationsResult) setError(true);
+      let colorsResult = await getFirestoreCollectionData("colors");
+      if (!colorsResult) setError(true);
       setSizes(getDropdownItemArray("size", sizesResult));
       setWaterDemands(getDropdownItemArray("demand", waterDemandsResult));
       setSunDemands(getDropdownItemArray("demand", sunDemandsResult));
       setLocations(getDropdownItemArray("location", locationsResult));
+      setColors(getDropdownItemArray("color", colorsResult));
       setHosty(hostaList);
     }
 
     fetchCollectionData()
-      .then()
       .catch((error) => {
-        setError(true);
+        setError(error);
       })
       .then(() => setLoading(false));
-  }, []);
+  }, [adding, editing, removing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row columns={2}>
@@ -67,9 +96,11 @@ const OverviewPage = () => {
                 waterDemands={waterDemands}
                 sunDemands={sunDemands}
                 locations={locations}
+                colors={colors}
                 triggerComponent={
                   <Button color="green" icon="plus" loading={loading} />
                 }
+                setAdding={setAdding}
               />
             </Grid.Column>
           </Grid.Row>

@@ -10,7 +10,6 @@ export const handleLoading = (loading) => {
 };
 
 export const handleError = (error) => {
-  console.log("error");
   return error ? (
     <Message negative>
       <Message.Header>We're sorry we can't apply that discount</Message.Header>

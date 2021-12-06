@@ -48,8 +48,13 @@ export async function editDocument(collection, id, item) {
 
 export function getDropdownItemArray(propName, collection) {
   let array = [];
-  collection.forEach((item) => {
-    array.push({ value: item[propName], text: item[propName] });
+  collection.forEach((item, index) => {
+    array.push({
+      value: item[propName],
+      text: item[propName],
+      key: index,
+      id: item[propName],
+    });
   });
   return array;
 }
