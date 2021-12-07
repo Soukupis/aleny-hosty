@@ -28,6 +28,7 @@ const ListItemCard = ({ item, collection, setRemoving }) => {
             <Button size="mini" circular icon="folder outline" color="blue" />
           }
           item={item}
+          images={images}
         />
         <DeleteModal
           triggerComponent={

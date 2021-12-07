@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Grid } from "semantic-ui-react";
+import { Button, Modal, Grid, Image, Segment } from "semantic-ui-react";
 import {
-  LeafImage,
   LocationImage,
   WaterImage,
   SunImage,
@@ -13,7 +12,7 @@ import ImageModal from "./ImageModal";
 import ModalCard from "./ModalCard";
 import { CardGroup } from "../styles/OverviewPageStyle";
 
-const HostaDetailModal = ({ triggerComponent, item }) => {
+const HostaDetailModal = ({ triggerComponent, item, images }) => {
   const [open, setOpen] = useState(false);
   return (
     <Modal
@@ -36,41 +35,31 @@ const HostaDetailModal = ({ triggerComponent, item }) => {
       </Modal.Header>
 
       <Modal.Content image>
-        <ImageModal image={item?.image ? item?.image : LeafImage} />
-        <Modal.Description>
-          <CardGroup>
-            <ModalCard
-              icon={LocationImage}
-              title={item?.location}
-              subtitile="Umístění"
-            />
-            <ModalCard
-              icon={SizeImage}
-              title={item?.size}
-              subtitile="Velikost"
-            />
-            <ModalCard
-              icon={SunImage}
-              title={item?.sunDemand}
-              subtitile="Nároky na slunce"
-            />
-            <ModalCard
-              icon={WaterImage}
-              title={item?.waterDemand}
-              subtitile="Nároky na vodu"
-            />
-            <ModalCard
-              icon={ColorImage}
-              title={item?.color}
-              subtitile="Barva"
-            />
-            <ModalCard
-              icon={ClockImage}
-              title={item?.buyDate?.toDate().toDateString()}
-              subtitile="Datum pořízení"
-            />
-          </CardGroup>
-        </Modal.Description>
+        <ImageModal image={images[0]} imageArray={images} />
+        <CardGroup style={{ justifyContent: "center" }}>
+          <ModalCard
+            icon={LocationImage}
+            title={item?.location}
+            subtitile="Umístění"
+          />
+          <ModalCard icon={SizeImage} title={item?.size} subtitile="Velikost" />
+          <ModalCard
+            icon={SunImage}
+            title={item?.sunDemand}
+            subtitile="Nároky na slunce"
+          />
+          <ModalCard
+            icon={WaterImage}
+            title={item?.waterDemand}
+            subtitile="Nároky na vodu"
+          />
+          <ModalCard icon={ColorImage} title={item?.color} subtitile="Barva" />
+          <ModalCard
+            icon={ClockImage}
+            title={item?.buyDate?.toDate().toDateString()}
+            subtitile="Datum pořízení"
+          />
+        </CardGroup>
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={() => setOpen(false)} primary>
