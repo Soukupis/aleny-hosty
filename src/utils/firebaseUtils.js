@@ -59,11 +59,11 @@ export function getDropdownItemArray(propName, collection) {
   return array;
 }
 
-async function getImageNames(registrationNumber) {
+async function getImageNames(id) {
   let namesList = [];
   await storage
     .ref(`images/`)
-    .child(`${registrationNumber}/`)
+    .child(`${id}/`)
     .listAll()
     .then((res) => {
       namesList = res.items.map((item) => {
@@ -76,12 +76,12 @@ async function getImageNames(registrationNumber) {
   return namesList;
 }
 
-export async function getImages(registrationNumber) {
-  let imageNames = await getImageNames(registrationNumber);
+export async function getImages(id) {
+  let imageNames = await getImageNames(id);
   let imageList = [];
   const requests = imageNames.map(async (image) => {
     await storage
-      .ref(`images/${registrationNumber}/`)
+      .ref(`images/${id}/`)
       .child(image)
       .getDownloadURL()
       .then((res) => {

@@ -7,18 +7,29 @@ import { Placeholder } from "../../../assets/index";
 
 import { getImages } from "../../../utils/firebaseUtils";
 
-const ListItemCard = ({ item, collection, setRemoving }) => {
+const ListItemCard = ({
+  setError,
+  item,
+  collection,
+  setRemoving,
+  locations,
+  sizes,
+  colors,
+  sunDemands,
+  waterDemands,
+  setEditing,
+}) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    getImages(item?.registrationNumber)
+    getImages(item?.hostaId)
       .catch((error) => {
-        console.log("error");
+        setError(error);
       })
       .then((res) => {
         setImages(res);
       });
-  }, [item]);
+  }, [item, setError]);
   return (
     <Item>
       <Item.Content className="right floated" style={{ marginTop: "10px" }}>
@@ -28,6 +39,12 @@ const ListItemCard = ({ item, collection, setRemoving }) => {
           }
           item={item}
           images={images}
+          locations={locations}
+          sizes={sizes}
+          colors={colors}
+          sunDemands={sunDemands}
+          waterDemands={waterDemands}
+          setEditing={setEditing}
         />
         <DeleteModal
           triggerComponent={

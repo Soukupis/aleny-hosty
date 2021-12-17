@@ -29,18 +29,7 @@ const OverviewPage = () => {
     async function fetchCollectionData() {
       let hostasResult = await getFirestoreCollectionData("hostas");
       if (!hostasResult) setError(true);
-      const hostaList = hostasResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="hostas"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-            setError={setError}
-          />
-        );
-      });
+
       let sizesResult = await getFirestoreCollectionData("sizes");
       if (!sizesResult) setError(true);
       let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
@@ -51,12 +40,35 @@ const OverviewPage = () => {
       if (!locationsResult) setError(true);
       let colorsResult = await getFirestoreCollectionData("colors");
       if (!colorsResult) setError(true);
-      setSizes(getDropdownItemArray("size", sizesResult));
-      setWaterDemands(getDropdownItemArray("demand", waterDemandsResult));
-      setSunDemands(getDropdownItemArray("demand", sunDemandsResult));
-      setLocations(getDropdownItemArray("location", locationsResult));
-      setColors(getDropdownItemArray("color", colorsResult));
-      setHosty(hostaList);
+      let sizesDrop = getDropdownItemArray("size", sizesResult);
+      let waterDemandsDrop = getDropdownItemArray("demand", waterDemandsResult);
+      let sunDemandsDrop = getDropdownItemArray("demand", sunDemandsResult);
+      let locationsDrop = getDropdownItemArray("location", locationsResult);
+      let colorsDrop = getDropdownItemArray("color", colorsResult);
+      setLocations(locationsDrop);
+      setSunDemands(sunDemandsDrop);
+      setWaterDemands(waterDemandsDrop);
+      setSizes(sizesDrop);
+      setColors(colorsDrop);
+      setHosty(
+        hostasResult.map((item, index) => {
+          return (
+            <ListItemCard
+              locations={locationsDrop}
+              sizes={sizesDrop}
+              sunDemands={sunDemandsDrop}
+              waterDemands={waterDemandsDrop}
+              colors={colorsDrop}
+              item={item}
+              key={index}
+              collection="hostas"
+              setRemoving={setRemoving}
+              setEditing={setEditing}
+              setError={setError}
+            />
+          );
+        })
+      );
     }
 
     fetchCollectionData().catch((error) => {

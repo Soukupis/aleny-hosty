@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Input, Form, Select } from "semantic-ui-react";
 import db, { storage } from "../../../firebase";
+import { v4 as uuid } from "uuid";
 
 import { Formik } from "formik";
 
@@ -26,12 +27,10 @@ const AddHostaModal = ({
     }
   };
 
-  const handleUpload = (registrationNumber) => {
+  const handleUpload = (id) => {
     const promises = [];
     images.forEach((images) => {
-      const uploadTask = storage
-        .ref(`images/${registrationNumber}/${images.name}`)
-        .put(images);
+      const uploadTask = storage.ref(`images/${id}/${images.name}`).put(images);
       promises.push(uploadTask);
       uploadTask.on(
         "state_changed",
@@ -40,10 +39,7 @@ const AddHostaModal = ({
           setError(error);
         },
         async () => {
-          await storage
-            .ref(`images/${registrationNumber}`)
-            .child(images.name)
-            .getDownloadURL();
+          await storage.ref(`images/${id}`).child(images.name).getDownloadURL();
         }
       );
     });
@@ -109,11 +105,13 @@ const AddHostaModal = ({
               }}
               onSubmit={(values, { setSubmitting }) => {
                 setAdding(true);
-                handleUpload(values.registrationNumber);
+                const id = uuid();
+                handleUpload(id);
                 db.firestore()
                   .collection("hostas")
                   .doc()
                   .set({
+                    hostaId: id,
                     name: values.name,
                     latinName: values.latinName,
                     size: values.size,
