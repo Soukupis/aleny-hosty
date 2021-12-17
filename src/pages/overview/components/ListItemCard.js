@@ -21,7 +21,6 @@ const ListItemCard = ({
   setLoading,
 }) => {
   const [images, setImages] = useState([]);
-
   useEffect(() => {
     setLoading(true);
     const unsubscribe = getImages(item?.hostaId)
