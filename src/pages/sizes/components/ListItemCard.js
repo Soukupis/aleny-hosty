@@ -5,7 +5,13 @@ import { SizeImage } from "../../../assets";
 import { Formik } from "formik";
 import { editDocument } from "../../../utils/firebaseUtils";
 
-const ListItemCard = ({ item, setRemoving, collection, setEditing }) => {
+const ListItemCard = ({
+  item,
+  setRemoving,
+  collection,
+  setEditing,
+  setError,
+}) => {
   const [input, setInput] = useState(false);
   return (
     <Item>
@@ -55,7 +61,6 @@ const ListItemCard = ({ item, setRemoving, collection, setEditing }) => {
                   if (!/^[0-9]*$/.test(values.size)) {
                     errors.size = "Pole musí obsahovat pouze číslice";
                   }
-                  console.log(errors);
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -64,7 +69,7 @@ const ListItemCard = ({ item, setRemoving, collection, setEditing }) => {
                     lastChange: new Date(),
                   })
                     .catch((error) => {
-                      console.log(error);
+                      setError(error);
                     })
                     .then((response) => {
                       setInput(false);

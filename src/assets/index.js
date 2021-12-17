@@ -9,6 +9,7 @@ import SizeImage from "./size.png";
 import OverviewImage from "./research.png";
 import ClockImage from "./clock.png";
 import ColorImage from "./ColorPalette.png";
+import Placeholder from "./placeholder.png";
 
 export {
   WaterImage,
@@ -22,4 +23,5 @@ export {
   OverviewImage,
   ClockImage,
   ColorImage,
+  Placeholder,
 };

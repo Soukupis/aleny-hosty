@@ -1,4 +1,4 @@
-import db from "../firebase";
+import db, { storage } from "../firebase";
 
 export async function getFirestoreCollectionData(collection) {
   let fetchError = false;
@@ -46,10 +46,50 @@ export async function editDocument(collection, id, item) {
   return !editError;
 }
 
-export function getDropdownItemArray(propName, collection) {
+export async function getDropdownItemArray(propName, collection) {
   let array = [];
-  collection.forEach((item) => {
-    array.push({ value: item[propName], text: item[propName] });
+  let collectionResult = await getFirestoreCollectionData(collection);
+  collectionResult.forEach((item, index) => {
+    array.push({
+      value: item[propName],
+      text: item[propName],
+      key: index,
+      id: item["id"],
+    });
   });
   return array;
+}
+
+async function getImageNames(id) {
+  let namesList = [];
+  await storage
+    .ref(`images/`)
+    .child(`${id}/`)
+    .listAll()
+    .then((res) => {
+      namesList = res.items.map((item) => {
+        return item.name;
+      });
+    })
+    .catch(() => {
+      console.log("error");
+    });
+  return namesList;
+}
+
+export async function getImages(id) {
+  let imageNames = await getImageNames(id);
+  let imageList = [];
+  const requests = imageNames.map(async (image) => {
+    await storage
+      .ref(`images/${id}/`)
+      .child(image)
+      .getDownloadURL()
+      .then((res) => {
+        imageList.push(res);
+      });
+  });
+  return Promise.all(requests).then(() => {
+    return imageList;
+  });
 }

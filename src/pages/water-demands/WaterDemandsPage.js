@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button, Divider } from "semantic-ui-react";
+import { Grid, List, Header, Button, Divider, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
-import { handleLoading, handleError } from "../../utils/messageUtils";
+import { handleLoading } from "../../utils/messageUtils";
 import { AddWaterDemandModal, ListItemCard } from "./index";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
@@ -15,38 +15,53 @@ const WaterDemandsPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchWaterDemandsData() {
+    let waterDemandsList = [];
+    let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
+    if (!waterDemandsResult) setError(true);
+    waterDemandsList = waterDemandsResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="waterDemands"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+          setError={setError}
+        />
+      );
+    });
+    setWaterDemands(waterDemandsList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let waterDemandsList = [];
 
-    async function fetchWaterDemandsData() {
-      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
-      if (!waterDemandsResult) setError(true);
-      waterDemandsList = waterDemandsResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="waterDemands"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-          />
-        );
-      });
-      setWaterDemands(waterDemandsList);
-    }
-
-    fetchWaterDemandsData()
-      .then()
-      .catch(() => {
-        setError(true);
+    const unsubscribe = fetchWaterDemandsData()
+      .catch((error) => {
+        setError(error);
       })
       .then(() => setLoading(false));
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row>
@@ -59,6 +74,7 @@ const WaterDemandsPage = () => {
                   <Button color="green" icon="plus" loading={loading} />
                 }
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>

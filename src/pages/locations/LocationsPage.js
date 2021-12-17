@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button } from "semantic-ui-react";
+import { Grid, List, Header, Button, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
-import { handleLoading, handleError } from "../../utils/messageUtils";
+import { handleLoading } from "../../utils/messageUtils";
 import { AddLocationModal, ListItemCard } from "./index";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
@@ -15,38 +15,55 @@ const SunDemandsPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchLocationData() {
+    let locationsList = [];
+    let locationsResult = await getFirestoreCollectionData("locations");
+    if (!locationsResult) setError("Načtení dat se nezdařilo");
+    locationsList = locationsResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="locations"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+          setError={setError}
+        />
+      );
+    });
+    setLocation(locationsList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let locationsList = [];
 
-    async function fetchSunDemandsData() {
-      let locationsResult = await getFirestoreCollectionData("locations");
-      if (!locationsResult) setError(true);
-      locationsList = locationsResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="locations"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-          />
-        );
-      });
-      setLocation(locationsList);
-    }
-
-    fetchSunDemandsData()
-      .then()
-      .catch(() => {
-        setError(true);
+    const unsubscribe = fetchLocationData()
+      .catch((error) => {
+        setError(error);
       })
-      .then(() => setLoading(false));
+      .then(() => {
+        setLoading(false);
+      });
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row>
@@ -59,6 +76,7 @@ const SunDemandsPage = () => {
                   <Button color="green" icon="plus" loading={loading} />
                 }
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>

@@ -3,8 +3,9 @@ import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
+const AddColorModal = ({ triggerComponent, setAdding, setError }) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -14,30 +15,31 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
       centered
       size="small"
     >
-      <Modal.Header>Přidání nároku na vodu</Modal.Header>
+      <Modal.Header>Přidání velikosti</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Formik
-            initialValues={{ waterDemand: "" }}
+            initialValues={{ color: "" }}
             validate={(values) => {
               const errors = {};
-              if (!values.waterDemand) {
-                errors.waterDemand = "Pole nesmí být prázdné";
+              if (!values.color) {
+                errors.color = "Pole nesmí být prázdné";
+              }
+              if (/^[0-9]*$/.test(values.color)) {
+                errors.color = "Pole nesmí obsahovat číslice";
               }
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
               setAdding(true);
               db.firestore()
-                .collection("waterDemands")
+                .collection("colors")
                 .doc()
                 .set({
-                  demand: values.waterDemand,
+                  color: values.color,
                   lastChange: new Date(),
                 })
-                .catch((error) => {
-                  setError(error);
-                })
+                .catch((error) => setError(error))
                 .then((response) => {
                   setSubmitting(false);
                   setOpen(false);
@@ -53,30 +55,29 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
               handleBlur,
               handleSubmit,
               isSubmitting,
+              /* and other goodies */
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group widths="equal">
                   <Form.Field
-                    name="waterDemand"
+                    name="color"
                     control={Input}
-                    label="Nárok na slunce"
+                    label="Barva"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.size}
+                    value={values.color}
                   />
                 </Form.Group>
-                {errors.waterDemand &&
-                touched.waterDemand &&
-                errors.waterDemand ? (
+                {errors.color && touched.color && errors.color ? (
                   <Message negative>
-                    <Message.Header>{errors.waterDemand}</Message.Header>
+                    <Message.Header>{errors.color}</Message.Header>
                   </Message>
                 ) : (
                   ""
                 )}
 
                 <Button type="submit" disabled={isSubmitting} positive>
-                  Přidat
+                  Submit
                 </Button>
                 <Button negative onClick={() => setOpen(false)}>
                   Zrušit
@@ -89,4 +90,4 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
     </Modal>
   );
 };
-export default AddWaterDemandModal;
+export default AddColorModal;

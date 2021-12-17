@@ -20,7 +20,6 @@ const DeleteModal = ({
       console.log("error");
     }
     setRemoving(false);
-    console.log("success");
   };
 
   return (

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddSizeModal = ({ triggerComponent, setAdding }) => {
+const AddSizeModal = ({ triggerComponent, setAdding, setError }) => {
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {});
 
   return (
     <Modal
@@ -41,6 +39,7 @@ const AddSizeModal = ({ triggerComponent, setAdding }) => {
                   size: values.size,
                   lastChange: new Date(),
                 })
+                .catch((error) => setError(error))
                 .then((response) => {
                   setSubmitting(false);
                   setOpen(false);

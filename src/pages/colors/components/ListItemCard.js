@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { Formik } from "formik";
-import { Item, Image, Button, Input, Form, Message } from "semantic-ui-react";
-
+import { Button, Item, Image, Form, Input, Message } from "semantic-ui-react";
 import { DeleteModal } from "../../../components/index";
-import { SunImage } from "../../../assets/index";
-
+import { ColorImage } from "../../../assets";
+import { Formik } from "formik";
 import { editDocument } from "../../../utils/firebaseUtils";
 
 const ListItemCard = ({
   item,
-  collection,
   setRemoving,
+  collection,
   setEditing,
   setError,
 }) => {
@@ -39,32 +37,35 @@ const ListItemCard = ({
               onClick={() => setRemoving(true)}
             />
           }
-          text={`Vážně chcete odstranit nárok na slunce ${item?.demand} ?`}
-          title="Mazání nároku na slunce"
+          text={`Vážně chcete odstranit barvu ${item?.color}`}
+          title="Mazání barvy"
           collection={collection}
           item={item}
           setRemoving={setRemoving}
         />
       </Item.Content>
-      <Image size="mini" src={SunImage} alt="avatar" />
+      <Image size="mini" src={ColorImage} alt="avatar" />
       <Item.Content>
         <Item.Header>
           {!input ? (
-            item?.demand
+            `${item?.color}`
           ) : (
             <>
               <Formik
-                initialValues={{ demand: item?.demand }}
+                initialValues={{ color: item?.color }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.demand) {
-                    errors.demand = "Pole nesmí být prázdné";
+                  if (!values.color) {
+                    errors.color = "Pole nesmí být prázdné";
+                  }
+                  if (/^[0-9]*$/.test(values.color)) {
+                    errors.color = "Pole nesmí obsahovat číslice";
                   }
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  editDocument("sunDemands", item.id, {
-                    demand: values.demand,
+                  editDocument("colors", item.id, {
+                    color: values.color,
                     lastChange: new Date(),
                   })
                     .catch((error) => {
@@ -83,25 +84,26 @@ const ListItemCard = ({
                   handleChange,
                   handleBlur,
                   handleSubmit,
+                  isSubmitting,
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Form.Group>
                       <Form.Field
                         size="small"
-                        name="demand"
+                        name="color"
                         control={Input}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.demand}
+                        value={values.color}
                         focus
                       />
-                      {errors.demand && touched.demand && errors.demand ? (
+                      {errors.color && touched.color && errors.color ? (
                         <Message
                           negative
                           style={{ marginTop: "0px" }}
                           size="mini"
                         >
-                          <Message.Header>{errors.demand}</Message.Header>
+                          <Message.Header>{errors.color}</Message.Header>
                         </Message>
                       ) : (
                         ""

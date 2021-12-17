@@ -3,7 +3,7 @@ import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddSunDemandModal = ({ triggerComponent, setAdding }) => {
+const AddSunDemandModal = ({ triggerComponent, setAdding, setError }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -35,6 +35,9 @@ const AddSunDemandModal = ({ triggerComponent, setAdding }) => {
                 .set({
                   demand: values.sunDemand,
                   lastChange: new Date(),
+                })
+                .catch((error) => {
+                  setError(error);
                 })
                 .then((response) => {
                   setSubmitting(false);

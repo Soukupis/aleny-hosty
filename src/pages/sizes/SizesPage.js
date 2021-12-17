@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../components";
-import { handleError, handleLoading } from "../../utils/messageUtils";
-import { Button, Divider, Grid, Header, List } from "semantic-ui-react";
+import { handleLoading } from "../../utils/messageUtils";
+import { Button, Divider, Grid, Header, List, Modal } from "semantic-ui-react";
 import { AddSizeModal, ListItemCard } from "./index";
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
 
@@ -13,39 +13,55 @@ const SizesPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchSizesData() {
+    let sizesList = [];
+    let sizesResult = await getFirestoreCollectionData("sizes");
+    if (!sizesResult) setError("Načtení dat se nezdařilo");
+    sizesResult = sizesResult.sort(function (a, b) {
+      return a.size - b.size;
+    });
+    sizesList = sizesResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="sizes"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+        />
+      );
+    });
+    setSizes(sizesList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let sizesList = [];
 
-    async function fetchSizesData() {
-      let sizesResult = await getFirestoreCollectionData("sizes");
-      if (!sizesResult) setError(true);
-      sizesResult = sizesResult.sort();
-      sizesList = sizesResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="sizes"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-          />
-        );
-      });
-      setSizes(sizesList);
-    }
-
-    fetchSizesData()
-      .then()
-      .catch(() => {
-        setError(true);
+    const unsubscribe = fetchSizesData()
+      .catch((error) => {
+        setError(error);
       })
       .then(() => setLoading(false));
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>
-      {handleError(error)}
       {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
       <Sidebar>
         <Grid>
           <Grid.Row columns={2}>
@@ -56,6 +72,7 @@ const SizesPage = () => {
               <AddSizeModal
                 triggerComponent={<Button color="green" icon="plus" />}
                 setAdding={setAdding}
+                setError={setError}
               />
             </Grid.Column>
           </Grid.Row>
