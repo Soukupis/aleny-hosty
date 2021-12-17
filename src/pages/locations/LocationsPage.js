@@ -15,35 +15,36 @@ const SunDemandsPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchLocationData() {
+    let locationsList = [];
+    let locationsResult = await getFirestoreCollectionData("locations");
+    if (!locationsResult) setError("Načtení dat se nezdařilo");
+    locationsList = locationsResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="locations"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+          setError={setError}
+        />
+      );
+    });
+    setLocation(locationsList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let locationsList = [];
 
-    async function fetchLocationData() {
-      let locationsResult = await getFirestoreCollectionData("locations");
-      if (!locationsResult) setError("Načtení dat se nezdařilo");
-      locationsList = locationsResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="locations"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-            setError={setError}
-          />
-        );
-      });
-      setLocation(locationsList);
-    }
-
-    fetchLocationData()
+    const unsubscribe = fetchLocationData()
       .catch((error) => {
         setError(error);
       })
       .then(() => {
         setLoading(false);
       });
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>

@@ -46,14 +46,15 @@ export async function editDocument(collection, id, item) {
   return !editError;
 }
 
-export function getDropdownItemArray(propName, collection) {
+export async function getDropdownItemArray(propName, collection) {
   let array = [];
-  collection.forEach((item, index) => {
+  let collectionResult = await getFirestoreCollectionData(collection);
+  collectionResult.forEach((item, index) => {
     array.push({
       value: item[propName],
       text: item[propName],
       key: index,
-      id: item[propName],
+      id: item["id"],
     });
   });
   return array;

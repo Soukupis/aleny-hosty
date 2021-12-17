@@ -13,35 +13,36 @@ const SizesPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchSizesData() {
+    let sizesList = [];
+    let sizesResult = await getFirestoreCollectionData("sizes");
+    if (!sizesResult) setError("Načtení dat se nezdařilo");
+    sizesResult = sizesResult.sort(function (a, b) {
+      return a.size - b.size;
+    });
+    sizesList = sizesResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="sizes"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+        />
+      );
+    });
+    setSizes(sizesList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let sizesList = [];
 
-    async function fetchSizesData() {
-      let sizesResult = await getFirestoreCollectionData("sizes");
-      if (!sizesResult) setError("Načtení dat se nezdařilo");
-      sizesResult = sizesResult.sort(function (a, b) {
-        return a.size - b.size;
-      });
-      sizesList = sizesResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="sizes"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-          />
-        );
-      });
-      setSizes(sizesList);
-    }
-
-    fetchSizesData()
+    const unsubscribe = fetchSizesData()
       .catch((error) => {
         setError(error);
       })
       .then(() => setLoading(false));
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>

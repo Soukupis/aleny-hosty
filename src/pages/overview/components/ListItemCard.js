@@ -18,18 +18,22 @@ const ListItemCard = ({
   sunDemands,
   waterDemands,
   setEditing,
+  setLoading,
 }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    getImages(item?.hostaId)
+    setLoading(true);
+    const unsubscribe = getImages(item?.hostaId)
       .catch((error) => {
         setError(error);
       })
       .then((res) => {
         setImages(res);
+        setLoading(false);
       });
-  }, [item, setError]);
+    return unsubscribe;
+  }, [item, setError, setLoading]);
   return (
     <Item>
       <Item.Content className="right floated" style={{ marginTop: "10px" }}>

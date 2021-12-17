@@ -15,33 +15,34 @@ const WaterDemandsPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchWaterDemandsData() {
+    let waterDemandsList = [];
+    let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
+    if (!waterDemandsResult) setError(true);
+    waterDemandsList = waterDemandsResult.map((item, index) => {
+      return (
+        <ListItemCard
+          item={item}
+          key={index}
+          collection="waterDemands"
+          setRemoving={setRemoving}
+          setEditing={setEditing}
+          setError={setError}
+        />
+      );
+    });
+    setWaterDemands(waterDemandsList);
+  }
+
   useEffect(() => {
     setLoading(true);
-    let waterDemandsList = [];
 
-    async function fetchWaterDemandsData() {
-      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
-      if (!waterDemandsResult) setError(true);
-      waterDemandsList = waterDemandsResult.map((item, index) => {
-        return (
-          <ListItemCard
-            item={item}
-            key={index}
-            collection="waterDemands"
-            setRemoving={setRemoving}
-            setEditing={setEditing}
-            setError={setError}
-          />
-        );
-      });
-      setWaterDemands(waterDemandsList);
-    }
-
-    fetchWaterDemandsData()
+    const unsubscribe = fetchWaterDemandsData()
       .catch((error) => {
         setError(error);
       })
       .then(() => setLoading(false));
+    return unsubscribe;
   }, [adding, removing, editing]);
   return (
     <>

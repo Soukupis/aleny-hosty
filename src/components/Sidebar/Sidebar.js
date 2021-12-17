@@ -21,19 +21,18 @@ import {
   Dropdown,
   Modal,
   Button,
+  Icon,
 } from "semantic-ui-react";
 
-import {
-  getFirestoreCollectionData,
-  getDropdownItemArray,
-} from "../../utils/firebaseUtils";
+import { getDropdownItemArray } from "../../utils/firebaseUtils";
 import { handleLoading } from "../../utils/messageUtils";
 import { LogoutButton } from "../index";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Sidebar = ({ children }) => {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [menuWidth, setMenuWidth] = useState();
+  const [menuWidth, setMenuWidth] = useState(null);
   const [latinName, setLatinName] = useState(false);
   const [czechName, setCzechName] = useState(false);
   const [sunDemands, setSunDemands] = useState(false);
@@ -42,39 +41,44 @@ const Sidebar = ({ children }) => {
   const [size, setSize] = useState(false);
   const [sunDemandsSelectList, setSunDemandsSelectList] = useState([]);
   const [waterDemandsSelectList, setWaterDemandsSelectList] = useState([]);
-  const [locationsSelectList, setLocationsDemandsSelectList] = useState([]);
+  const [locationsSelectList, setLocationsSelectList] = useState([]);
+
+  const { currentUser } = useAuth();
+
+  const fetchCollectionData = async () => {
+    let waterDemandDropdownArray = await getDropdownItemArray(
+      "demand",
+      "waterDemands"
+    );
+    let sunDemandDropdownArray = await getDropdownItemArray(
+      "demand",
+      "sunDemands"
+    );
+    let locationsDropdownArray = await getDropdownItemArray(
+      "location",
+      "locations"
+    );
+    setWaterDemandsSelectList(waterDemandDropdownArray);
+    setSunDemandsSelectList(sunDemandDropdownArray);
+    setLocationsSelectList(locationsDropdownArray);
+  };
 
   useEffect(() => {
-    setLoading(true);
     setMenuWidth(document.getElementsByClassName("menu")[0].clientWidth);
-
-    async function fetchCollectionData() {
-      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
-      if (!waterDemandsResult) setError("Načtení dat se nezdařilo");
-      let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
-      if (!sunDemandsResult) setError("Načtení dat se nezdařilo");
-      let locationsResult = await getFirestoreCollectionData("locations");
-      if (!locationsResult) setError("Načtení dat se nezdařilo");
-      setWaterDemandsSelectList(
-        getDropdownItemArray("demand", waterDemandsResult)
-      );
-      setSunDemandsSelectList(getDropdownItemArray("demand", sunDemandsResult));
-      setLocationsDemandsSelectList(
-        getDropdownItemArray("location", locationsResult)
-      );
-    }
-
-    fetchCollectionData()
+    const unsubscribe = fetchCollectionData()
       .catch((error) => {
-        setError(true);
+        setError(error);
       })
-      .then(() => setLoading(false));
-  }, []);
+      .then((response) => {
+        setLoading(false);
+      });
+    return unsubscribe;
+  }, [currentUser]);
   return (
     <>
       {handleLoading(loading)}
       {error ? (
-        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
           <Modal.Header>Chyba</Modal.Header>
           <Modal.Content>
             <p>{error}</p>
@@ -99,7 +103,12 @@ const Sidebar = ({ children }) => {
             <HeaderTitle>Aleny Hosty</HeaderTitle>
           </SidebarHeader>
         </Link>
-
+        <Segment>
+          <Icon name="user" color="green" />
+          <span>
+            {currentUser?.email} <LogoutButton />
+          </span>
+        </Segment>
         <HeaderSegment basic>
           <Header
             as="h3"
@@ -268,7 +277,6 @@ const Sidebar = ({ children }) => {
                         </Link>
                       </Dropdown.Menu>
                     </Dropdown>
-                    <LogoutButton />
                   </Menu>
                 </Segment>
               </Grid.Row>

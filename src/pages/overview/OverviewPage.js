@@ -23,58 +23,53 @@ const OverviewPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  async function fetchCollectionData() {
+    let hostasResult = await getFirestoreCollectionData("hostas");
+    if (!hostasResult) setError(true);
+
+    let sizesDrop = await getDropdownItemArray("size", "sizes");
+    let waterDemandsDrop = await getDropdownItemArray("demand", "waterDemands");
+    let sunDemandsDrop = await getDropdownItemArray("demand", "sunDemands");
+    let locationsDrop = await getDropdownItemArray("location", "locations");
+    let colorsDrop = await getDropdownItemArray("color", "colors");
+    setLocations(locationsDrop);
+    setSunDemands(sunDemandsDrop);
+    setWaterDemands(waterDemandsDrop);
+    setSizes(sizesDrop);
+    setColors(colorsDrop);
+    setHosty(
+      hostasResult.map((item, index) => {
+        return (
+          <ListItemCard
+            locations={locationsDrop}
+            sizes={sizesDrop}
+            sunDemands={sunDemandsDrop}
+            waterDemands={waterDemandsDrop}
+            colors={colorsDrop}
+            item={item}
+            key={index}
+            collection="hostas"
+            setRemoving={setRemoving}
+            setEditing={setEditing}
+            setError={setError}
+            setLoading={setLoading}
+          />
+        );
+      })
+    );
+  }
+
   useEffect(() => {
     setLoading(true);
 
-    async function fetchCollectionData() {
-      let hostasResult = await getFirestoreCollectionData("hostas");
-      if (!hostasResult) setError(true);
-
-      let sizesResult = await getFirestoreCollectionData("sizes");
-      if (!sizesResult) setError(true);
-      let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
-      if (!waterDemandsResult) setError(true);
-      let sunDemandsResult = await getFirestoreCollectionData("sunDemands");
-      if (!sunDemandsResult) setError(true);
-      let locationsResult = await getFirestoreCollectionData("locations");
-      if (!locationsResult) setError(true);
-      let colorsResult = await getFirestoreCollectionData("colors");
-      if (!colorsResult) setError(true);
-      let sizesDrop = getDropdownItemArray("size", sizesResult);
-      let waterDemandsDrop = getDropdownItemArray("demand", waterDemandsResult);
-      let sunDemandsDrop = getDropdownItemArray("demand", sunDemandsResult);
-      let locationsDrop = getDropdownItemArray("location", locationsResult);
-      let colorsDrop = getDropdownItemArray("color", colorsResult);
-      setLocations(locationsDrop);
-      setSunDemands(sunDemandsDrop);
-      setWaterDemands(waterDemandsDrop);
-      setSizes(sizesDrop);
-      setColors(colorsDrop);
-      setHosty(
-        hostasResult.map((item, index) => {
-          return (
-            <ListItemCard
-              locations={locationsDrop}
-              sizes={sizesDrop}
-              sunDemands={sunDemandsDrop}
-              waterDemands={waterDemandsDrop}
-              colors={colorsDrop}
-              item={item}
-              key={index}
-              collection="hostas"
-              setRemoving={setRemoving}
-              setEditing={setEditing}
-              setError={setError}
-            />
-          );
-        })
-      );
-    }
-
-    fetchCollectionData().catch((error) => {
-      setError(error);
-    });
-    setLoading(false);
+    const unsubscribe = fetchCollectionData()
+      .catch((error) => {
+        setError(error);
+      })
+      .then(() => {
+        setLoading(false);
+      });
+    return unsubscribe;
   }, [adding, editing, removing]);
 
   return (

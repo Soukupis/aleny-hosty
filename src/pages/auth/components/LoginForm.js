@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import {
   Segment,
@@ -12,15 +12,14 @@ import {
 import { Formik } from "formik";
 
 const LoginForm = () => {
-  const [error, setError] = useState("");
-  const history = useHistory();
+  const [error, setError] = useState(false);
 
   const { login } = useAuth();
 
   return (
     <>
       {error ? (
-        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
           <Modal.Header>Chyba</Modal.Header>
           <Modal.Content>
             <p>{error}</p>
@@ -50,11 +49,12 @@ const LoginForm = () => {
           setSubmitting(true);
           login(values.email, values.password)
             .catch((error) => {
-              setError(error);
+              setError(error.message);
+              values.email = "";
+              values.password = "";
             })
             .then(() => {
               setSubmitting(false);
-              history.push("/dashboard");
             });
         }}
       >

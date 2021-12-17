@@ -20,7 +20,7 @@ const RegisterForm = () => {
   return (
     <>
       {error ? (
-        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
           <Modal.Header>Chyba</Modal.Header>
           <Modal.Content>
             <p>{error}</p>
