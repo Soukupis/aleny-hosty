@@ -43,7 +43,7 @@ const Sidebar = ({ children }) => {
   const [waterDemandsSelectList, setWaterDemandsSelectList] = useState([]);
   const [locationsSelectList, setLocationsSelectList] = useState([]);
 
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
 
   const fetchCollectionData = async () => {
     let waterDemandDropdownArray = await getDropdownItemArray(
@@ -109,13 +109,46 @@ const Sidebar = ({ children }) => {
             {currentUser?.email} <LogoutButton />
           </span>
         </Segment>
-        <HeaderSegment basic>
+        <HeaderSegment basic style={{ margin: "0px" }}>
           <Header
             as="h3"
             content="Filtry"
             subheader="Zde můžete filtrovat podle parametrů hosty"
           />
         </HeaderSegment>
+        {isAdmin ? (
+          <>
+            <Segment basic style={{ paddingTop: "0px" }}>
+              <Dropdown
+                placeholder="Vlastnosti hosty"
+                fluid
+                selection
+                style={{ marginTop: "6px" }}
+              >
+                <Dropdown.Menu>
+                  <Link to="/locations">
+                    <Dropdown.Item>Poloha</Dropdown.Item>
+                  </Link>
+                  <Link to="/sizes">
+                    <Dropdown.Item>Velikost</Dropdown.Item>
+                  </Link>
+                  <Link to="/colors">
+                    <Dropdown.Item>Barvy</Dropdown.Item>
+                  </Link>
+                  <Link to="/sun-demands">
+                    <Dropdown.Item>Nároky na slunce</Dropdown.Item>
+                  </Link>
+                  <Link to="/water-demands">
+                    <Dropdown.Item>Nároky na vodu</Dropdown.Item>
+                  </Link>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Segment>
+            <Divider clearing />
+          </>
+        ) : (
+          <></>
+        )}
         <Segment basic>
           <Form size="tiny">
             <Grid textAlign="left">
@@ -250,36 +283,6 @@ const Sidebar = ({ children }) => {
                   />
                 </Grid.Column>
               </FormRow>
-              <Divider clearing />
-              <Grid.Row>
-                <Segment basic style={{ paddingTop: "0px" }}>
-                  <Menu size="large">
-                    <Dropdown
-                      item
-                      text=" Vlastnosti"
-                      style={{ marginTop: "6px" }}
-                    >
-                      <Dropdown.Menu>
-                        <Link to="/locations">
-                          <Dropdown.Item>Poloha</Dropdown.Item>
-                        </Link>
-                        <Link to="/sizes">
-                          <Dropdown.Item>Velikost</Dropdown.Item>
-                        </Link>
-                        <Link to="/colors">
-                          <Dropdown.Item>Barvy</Dropdown.Item>
-                        </Link>
-                        <Link to="/sun-demands">
-                          <Dropdown.Item>Nároky na slunce</Dropdown.Item>
-                        </Link>
-                        <Link to="/water-demands">
-                          <Dropdown.Item>Nároky na vodu</Dropdown.Item>
-                        </Link>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Menu>
-                </Segment>
-              </Grid.Row>
             </Grid>
           </Form>
         </Segment>
