@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Grid, Image, Segment } from "semantic-ui-react";
+import { Button, Modal, Grid } from "semantic-ui-react";
 import {
   LocationImage,
   WaterImage,

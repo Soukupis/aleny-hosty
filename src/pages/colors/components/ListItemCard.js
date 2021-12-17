@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Item, Image, Form, Input, Message } from "semantic-ui-react";
 import { DeleteModal } from "../../../components/index";
-import { ColorImage, SizeImage } from "../../../assets";
+import { ColorImage } from "../../../assets";
 import { Formik } from "formik";
 import { editDocument } from "../../../utils/firebaseUtils";
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, List, Header, Button, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
-import { handleLoading, handleError } from "../../utils/messageUtils";
+import { handleLoading } from "../../utils/messageUtils";
 import { AddHostaModal, ListItemCard } from "./index";
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "../../utils/firebaseUtils";
 
 const OverviewPage = () => {
-  const [hosty, setHosty] = useState();
+  const [hosty, setHosty] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [waterDemands, setWaterDemands] = useState([]);
   const [sunDemands, setSunDemands] = useState([]);
@@ -23,17 +23,13 @@ const OverviewPage = () => {
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const [images, setImages] = useState([]);
-  const [urls, setUrls] = useState([]);
-
   useEffect(() => {
     setLoading(true);
-    let hostaList = [];
 
     async function fetchCollectionData() {
       let hostasResult = await getFirestoreCollectionData("hostas");
       if (!hostasResult) setError(true);
-      hostaList = hostasResult.map((item, index) => {
+      const hostaList = hostasResult.map((item, index) => {
         return (
           <ListItemCard
             item={item}
@@ -63,11 +59,10 @@ const OverviewPage = () => {
       setHosty(hostaList);
     }
 
-    fetchCollectionData()
-      .catch((error) => {
-        setError(error);
-      })
-      .then(() => setLoading(false));
+    fetchCollectionData().catch((error) => {
+      setError(error);
+    });
+    setLoading(false);
   }, [adding, editing, removing]);
 
   return (

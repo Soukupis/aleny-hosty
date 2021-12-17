@@ -17,7 +17,6 @@ const AddHostaModal = ({
   const [open, setOpen] = useState(false);
 
   const [images, setImages] = useState([]);
-  const [urls, setUrls] = useState([]);
 
   const handleImageChange = (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
@@ -29,7 +28,7 @@ const AddHostaModal = ({
 
   const handleUpload = (registrationNumber) => {
     const promises = [];
-    images.map((images) => {
+    images.forEach((images) => {
       const uploadTask = storage
         .ref(`images/${registrationNumber}/${images.name}`)
         .put(images);
@@ -44,10 +43,7 @@ const AddHostaModal = ({
           await storage
             .ref(`images/${registrationNumber}`)
             .child(images.name)
-            .getDownloadURL()
-            .then((urls) => {
-              setUrls((prev) => [...prev, urls]);
-            });
+            .getDownloadURL();
         }
       );
     });

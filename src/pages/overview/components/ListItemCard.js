@@ -16,10 +16,9 @@ const ListItemCard = ({ item, collection, setRemoving }) => {
         console.log("error");
       })
       .then((res) => {
-        console.log("res", res);
         setImages(res);
       });
-  }, []);
+  }, [item]);
   return (
     <Item>
       <Item.Content className="right floated" style={{ marginTop: "10px" }}>

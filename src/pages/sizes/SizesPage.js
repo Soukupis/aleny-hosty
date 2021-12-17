@@ -23,7 +23,6 @@ const SizesPage = () => {
       sizesResult = sizesResult.sort(function (a, b) {
         return a.size - b.size;
       });
-      console.log(sizesResult);
       sizesList = sizesResult.map((item, index) => {
         return (
           <ListItemCard
@@ -31,6 +30,7 @@ const SizesPage = () => {
             key={index}
             collection="sizes"
             setRemoving={setRemoving}
+            setEditing={setEditing}
           />
         );
       });

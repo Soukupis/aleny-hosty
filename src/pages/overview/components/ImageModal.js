@@ -10,8 +10,8 @@ const ImageModal = ({ image, imageArray }) => {
       trigger={<Image size="medium" src={image} wrapped />}
     >
       <Modal.Content>
-        {imageArray.map((image) => {
-          return <ImageModalContainer src={image} />;
+        {imageArray.map((image, index) => {
+          return <ImageModalContainer src={image} key={index} />;
         })}
       </Modal.Content>
     </Modal>

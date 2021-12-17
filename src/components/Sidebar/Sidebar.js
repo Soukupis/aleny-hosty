@@ -28,6 +28,7 @@ import {
   getDropdownItemArray,
 } from "../../utils/firebaseUtils";
 import { handleLoading } from "../../utils/messageUtils";
+import { LogoutButton } from "../index";
 
 const Sidebar = ({ children }) => {
   const [error, setError] = useState(false);
@@ -267,6 +268,7 @@ const Sidebar = ({ children }) => {
                         </Link>
                       </Dropdown.Menu>
                     </Dropdown>
+                    <LogoutButton />
                   </Menu>
                 </Segment>
               </Grid.Row>

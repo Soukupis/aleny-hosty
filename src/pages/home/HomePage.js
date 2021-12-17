@@ -38,6 +38,11 @@ const HomePage = () => {
                   Přihlášení
                 </Link>
               </div>
+              <div className="ui big button blue">
+                <Link style={{ color: "white" }} to="/register">
+                  Registrace
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </Grid.Column>

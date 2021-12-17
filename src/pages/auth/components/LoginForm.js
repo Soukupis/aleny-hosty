@@ -1,69 +1,117 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import {
+  Segment,
+  Form,
+  Input,
+  Button,
+  Message,
+  Modal,
+} from "semantic-ui-react";
+import { Formik } from "formik";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const { login } = useAuth();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      setError("");
-      await login(email, password);
-      history.push("/dashboard");
-    } catch {
-      setError("Failed to log in");
-    }
-    setLoading(false);
-  };
-
   return (
     <>
       {error ? (
-        <div className="ui error message">
-          <div className="content">
-            <div className="header">{error}</div>
-          </div>
-        </div>
-      ) : null}
-      <form className="ui large form error" onSubmit={handleSubmit}>
-        <h4 className="ui dividing header">Log In</h4>
-        <div className="field">
-          <div className="ui left icon input">
-            <input
-              type="text"
-              placeholder="Enter Username"
-              name="username"
-              onChange={(event) => setEmail(event.target.value)}
+        <Modal size="tiny" open={error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.email) {
+            errors.email = "Pole nesmí být prázdné";
+          }
+          if (!values.password) {
+            errors.password = "Pole nesmí být prázdné";
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setSubmitting(true);
+          login(values.email, values.password)
+            .catch((error) => {
+              setError(error);
+            })
+            .then(() => {
+              setSubmitting(false);
+              history.push("/dashboard");
+            });
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <h4 className="ui dividing header">Přihlášení</h4>
+            <Form.Field
+              name="email"
+              control={Input}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              placeholder="Zadejte e-mail"
             />
-            <i className="envelope icon"></i>
-          </div>
-        </div>
-        <div className="field">
-          <div className="ui left icon input">
-            <input
-              type="password"
-              placeholder="Enter Password"
+            {errors.email && touched.email && errors.email ? (
+              <Message negative>
+                <Message.Header>{errors.email}</Message.Header>
+              </Message>
+            ) : (
+              ""
+            )}
+            <Form.Field
               name="password"
-              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              control={Input}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+              placeholder="Zadejte heslo"
             />
-            <i className="lock icon"></i>
-          </div>
-        </div>
-        <button
-          className="ui fluid large green submit button"
-          disabled={loading}
-        >
-          Log In
-        </button>
-      </form>
+
+            <div className="field">
+              <Segment>
+                Chcete si založit účet?
+                <Link to="/register"> Registrace</Link>
+              </Segment>
+            </div>
+            <Button
+              fluid
+              size="large"
+              color="green"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Log In
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };
