@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, Form, Select } from "semantic-ui-react";
 import db, { storage } from "../../../firebase";
 import { v4 as uuid } from "uuid";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { Formik } from "formik";
 
@@ -19,6 +21,9 @@ const AddHostaModal = ({
 
   const [images, setImages] = useState([]);
 
+  useEffect(() => {
+    setAdding(true);
+  });
   const handleImageChange = (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
       const newImage = e.target.files[i];
@@ -67,7 +72,7 @@ const AddHostaModal = ({
                 color: "",
                 sunDemand: "",
                 waterDemand: "",
-                buyDate: "",
+                buyDate: new Date(),
                 registrationNumber: "",
                 lastChange: "",
               }}
@@ -100,11 +105,9 @@ const AddHostaModal = ({
                 if (!values.registrationNumber) {
                   errors.registrationNumber = "Pole nesmí být prázdné";
                 }
-                console.log(errors);
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                setAdding(true);
                 const id = uuid();
                 handleUpload(id);
                 db.firestore()
@@ -119,7 +122,7 @@ const AddHostaModal = ({
                     color: values.color,
                     sunDemand: values.sunDemand,
                     waterDemand: values.waterDemand,
-                    buyDate: new Date(),
+                    buyDate: values.buyDate,
                     registrationNumber: values.registrationNumber,
                     lastChange: new Date(),
                   })
@@ -141,8 +144,10 @@ const AddHostaModal = ({
                 isSubmitting,
                 /* and other goodies */
               }) => {
-                const handleChange = (e, { name, value }) =>
+                const handleChange = (e, { name, value }) => {
                   setFieldValue(name, value);
+                };
+
                 return (
                   <Form onSubmit={handleSubmit}>
                     <Form.Group widths="equal">
@@ -179,7 +184,6 @@ const AddHostaModal = ({
                         placeholder="Vyberte nárok na vláhu..."
                         options={waterDemands}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.waterDemand}
                       />
                       <Form.Field
@@ -189,7 +193,6 @@ const AddHostaModal = ({
                         placeholder="Vyberte nárok na slunce..."
                         options={sunDemands}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.sunDemand}
                       />
                     </Form.Group>
@@ -202,7 +205,6 @@ const AddHostaModal = ({
                         placeholder="Vyberte umístění..."
                         options={locations}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.location}
                       />
                       <Form.Field
@@ -212,7 +214,6 @@ const AddHostaModal = ({
                         placeholder="Vyberte velikost..."
                         options={sizes}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.size}
                       />
                       <Form.Field
@@ -222,19 +223,20 @@ const AddHostaModal = ({
                         placeholder="Vyberte barvu..."
                         options={colors}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.color}
                       />
                     </Form.Group>
 
                     <Form.Group>
-                      <Form.Field
-                        control={Input}
-                        label="Datum pořízení"
+                      <DatePicker
+                        id="buyDate"
                         name="buyDate"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        placeholder="Zadejte datum pořízení"
                         value={values.buyDate}
+                        selected={values.buyDate}
+                        onChange={(val) => {
+                          setFieldValue("buyDate", val);
+                        }}
                       />
                     </Form.Group>
                     <Form.Group>
