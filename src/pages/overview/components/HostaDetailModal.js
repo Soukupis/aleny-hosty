@@ -13,6 +13,7 @@ import ImageModal from "./ImageModal";
 import ModalCard from "./ModalCard";
 import { CardGroup } from "../styles/OverviewPageStyle";
 import { editDocument } from "../../../utils/firebaseUtils";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const HostaDetailModal = ({
   triggerComponent,
@@ -27,6 +28,8 @@ const HostaDetailModal = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState(false);
+
+  const { isAdmin } = useAuth();
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -57,7 +60,7 @@ const HostaDetailModal = ({
             marginTop: "5px",
           }}
         >
-          {input ? (
+          {input && isAdmin ? (
             <>
               <Formik
                 initialValues={{
@@ -344,7 +347,7 @@ const HostaDetailModal = ({
                       </Form.Group>
 
                       <Button type="submit" disabled={isSubmitting} positive>
-                        Submit
+                        Potvrdit
                       </Button>
                     </Form>
                   );
@@ -388,7 +391,7 @@ const HostaDetailModal = ({
         </CardGroup>
       </Modal.Content>
       <Modal.Actions>
-        {!input ? (
+        {!input && isAdmin ? (
           <Button onClick={() => setInput(true)} primary>
             Upravit
           </Button>

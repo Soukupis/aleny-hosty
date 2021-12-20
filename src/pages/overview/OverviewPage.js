@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {Grid, List, Header, Button, Modal} from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Grid, List, Header, Button, Modal } from "semantic-ui-react";
 
-import {Sidebar} from "../../components";
-import {handleLoading} from "../../utils/messageUtils";
-import {AddHostaModal, ListItemCard} from "./index";
+import { Sidebar } from "../../components";
+import { handleLoading } from "../../utils/messageUtils";
+import { AddHostaModal, ListItemCard } from "./index";
 
 import {
   getFirestoreCollectionData,
   getDropdownItemArray,
 } from "../../utils/firebaseUtils";
+import { useAuth } from "../../contexts/AuthContext";
 
 const OverviewPage = () => {
   const [hosty, setHosty] = useState([]);
@@ -24,17 +25,28 @@ const OverviewPage = () => {
   const [editing, setEditing] = useState(false);
   const [filter, setFilter] = useState(null);
 
+  const { isAdmin } = useAuth();
+
   useEffect(() => {
     async function fetchCollectionData(filter) {
       let hostasResult = await getFirestoreCollectionData("hostas");
       if (filter) {
         let is = false;
         let hostaResult1 = hostasResult.filter((item) => {
-          item.name.toUpperCase().includes(filter.name.toUpperCase()) && item.latinName
-              .toUpperCase()
-              .includes(filter.latinName.toUpperCase())
-              ? (is = true)
-              : (is = false);
+          console.log(filter);
+          item.name.toUpperCase().includes(filter.name.toUpperCase()) &&
+          item.latinName
+            .toUpperCase()
+            .includes(filter.latinName.toUpperCase()) &&
+          item.sunDemand
+            .toUpperCase()
+            .includes(filter.sunDemand.toUpperCase()) &&
+          item.waterDemand
+            .toUpperCase()
+            .includes(filter.waterDemand.toUpperCase()) &&
+          item.location.toUpperCase().includes(filter.location.toUpperCase())
+            ? (is = true)
+            : (is = false);
 
           return is;
         });
@@ -78,36 +90,36 @@ const OverviewPage = () => {
       }
 
       setHosty(
-          hostasResult.map((item, index) => {
-            return (
-                <ListItemCard
-                    locations={locationsDrop}
-                    sizes={sizesDrop}
-                    sunDemands={sunDemandsDrop}
-                    waterDemands={waterDemandsDrop}
-                    colors={colorsDrop}
-                    item={item}
-                    key={index}
-                    collection="hostas"
-                    setRemoving={setRemoving}
-                    setEditing={setEditing}
-                    setError={setError}
-                    setLoading={setLoading}
-                />
-            );
-          })
+        hostasResult.map((item, index) => {
+          return (
+            <ListItemCard
+              locations={locationsDrop}
+              sizes={sizesDrop}
+              sunDemands={sunDemandsDrop}
+              waterDemands={waterDemandsDrop}
+              colors={colorsDrop}
+              item={item}
+              key={index}
+              collection="hostas"
+              setRemoving={setRemoving}
+              setEditing={setEditing}
+              setError={setError}
+              setLoading={setLoading}
+            />
+          );
+        })
       );
     }
 
     setLoading(true);
 
     const unsubscribe = fetchCollectionData(filter)
-        .catch((error) => {
-          setError(error);
-        })
-        .then(() => {
-          setLoading(false);
-        });
+      .catch((error) => {
+        setError(error);
+      })
+      .then(() => {
+        setLoading(false);
+      });
     return unsubscribe;
   }, [
     adding,
@@ -122,49 +134,53 @@ const OverviewPage = () => {
   ]);
 
   return (
-      <>
-        {handleLoading(loading)}
-        {error ? (
-            <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
-              <Modal.Header>Chyba</Modal.Header>
-              <Modal.Content>
-                <p>{error}</p>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button negative onClick={() => setError(false)}>
-                  Zavřít
-                </Button>
-              </Modal.Actions>
-            </Modal>
-        ) : (
-            ""
-        )}
-        <Sidebar setFilter={setFilter}>
-          <Grid>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Header as="h1">Hosty</Header>
-              </Grid.Column>
-              <Grid.Column style={{textAlign: "right"}}>
+    <>
+      {handleLoading(loading)}
+      {error ? (
+        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
+          <Modal.Header>Chyba</Modal.Header>
+          <Modal.Content>
+            <p>{error}</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={() => setError(false)}>
+              Zavřít
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      ) : (
+        ""
+      )}
+      <Sidebar setFilter={setFilter}>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header as="h1">Hosty</Header>
+            </Grid.Column>
+            {isAdmin ? (
+              <Grid.Column style={{ textAlign: "right" }}>
                 <AddHostaModal
-                    sizes={sizes}
-                    waterDemands={waterDemands}
-                    sunDemands={sunDemands}
-                    locations={locations}
-                    colors={colors}
-                    triggerComponent={
-                      <Button color="green" icon="plus" loading={loading}/>
-                    }
-                    setAdding={setAdding}
+                  sizes={sizes}
+                  waterDemands={waterDemands}
+                  sunDemands={sunDemands}
+                  locations={locations}
+                  colors={colors}
+                  triggerComponent={
+                    <Button color="green" icon="plus" loading={loading} />
+                  }
+                  setAdding={setAdding}
                 />
               </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <List divided size="huge" verticalAlign="middle">
-            {hosty}
-          </List>
-        </Sidebar>
-      </>
+            ) : (
+              <></>
+            )}
+          </Grid.Row>
+        </Grid>
+        <List divided size="huge" verticalAlign="middle">
+          {hosty}
+        </List>
+      </Sidebar>
+    </>
   );
 };
 

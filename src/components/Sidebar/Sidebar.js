@@ -167,9 +167,21 @@ const Sidebar = ({ children, setFilter }) => {
           </>
         )}
         <Formik
-          initialValues={{ name: "", latinName: "" }}
+          initialValues={{
+            name: "",
+            latinName: "",
+            sunDemand: "",
+            waterDemand: "",
+            location: "",
+          }}
           onSubmit={(values, { setSubmitting }) => {
-            setFilter({ name: values.name, latinName: values.latinName });
+            setFilter({
+              name: values.name,
+              latinName: values.latinName,
+              sunDemand: values.sunDemand,
+              waterDemand: values.waterDemand,
+              location: values.location,
+            });
             setSubmitting(false);
           }}
         >
@@ -177,13 +189,16 @@ const Sidebar = ({ children, setFilter }) => {
             values,
             errors,
             touched,
-            handleChange,
+            setFieldValue,
             handleBlur,
             handleSubmit,
             isSubmitting,
             /* and other goodies */
-          }) => (
-            <>
+          }) => {
+            const handleChange = (e, { name, value }) => {
+              setFieldValue(name, value);
+            };
+            return (
               <Segment basic>
                 <Form size="tiny" onSubmit={handleSubmit}>
                   <Grid textAlign="left">
@@ -244,7 +259,10 @@ const Sidebar = ({ children, setFilter }) => {
                         <Form.Field>
                           <Checkbox
                             label="Nároky na slunce"
-                            onClick={() => setSunDemands(!sunDemands)}
+                            onClick={() => {
+                              setSunDemands(!sunDemands);
+                              values.sunDemand = "";
+                            }}
                           />
                         </Form.Field>
                       </Grid.Column>
@@ -253,9 +271,12 @@ const Sidebar = ({ children, setFilter }) => {
                       <Grid.Column>
                         <Form.Field
                           control={Select}
+                          name="sunDemand"
                           options={sunDemandsSelectList}
                           placeholder="Nárok na slunce"
                           disabled={!sunDemands}
+                          onChange={handleChange}
+                          value={values.sunDemand}
                         />
                       </Grid.Column>
                     </Grid.Row>
@@ -264,7 +285,10 @@ const Sidebar = ({ children, setFilter }) => {
                         <Form.Field>
                           <Checkbox
                             label="Nárok na vodu"
-                            onClick={() => setWaterDemands(!waterDemands)}
+                            onClick={() => {
+                              setWaterDemands(!waterDemands);
+                              values.waterDemad = "";
+                            }}
                           />
                         </Form.Field>
                       </Grid.Column>
@@ -273,9 +297,12 @@ const Sidebar = ({ children, setFilter }) => {
                       <Grid.Column>
                         <Form.Field
                           control={Select}
+                          name="waterDemand"
                           options={waterDemandsSelectList}
                           placeholder="Nárok na vodu"
                           disabled={!waterDemands}
+                          onChange={handleChange}
+                          value={values.waterDemand}
                         />
                       </Grid.Column>
                     </FormRow>
@@ -318,7 +345,10 @@ const Sidebar = ({ children, setFilter }) => {
                         <Form.Field>
                           <Checkbox
                             label="Poloha"
-                            onClick={() => setLocation(!location)}
+                            onClick={() => {
+                              setLocation(!location);
+                              values.location = "";
+                            }}
                           />
                         </Form.Field>
                       </Grid.Column>
@@ -326,10 +356,13 @@ const Sidebar = ({ children, setFilter }) => {
                     <Grid.Row>
                       <Grid.Column>
                         <Form.Field
+                          name="location"
                           control={Select}
                           options={locationsSelectList}
                           placeholder="Poloha"
                           disabled={!location}
+                          onChange={handleChange}
+                          value={values.location}
                         />
                       </Grid.Column>
                     </Grid.Row>
@@ -343,8 +376,8 @@ const Sidebar = ({ children, setFilter }) => {
                   </Grid>
                 </Form>
               </Segment>
-            </>
-          )}
+            );
+          }}
         </Formik>
       </div>
       <div
