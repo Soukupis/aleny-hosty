@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, Form, Select, Message } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Select } from "semantic-ui-react";
 import db, { storage } from "../../../firebase";
 import { v4 as uuid } from "uuid";
 import DatePicker from "react-datepicker";
