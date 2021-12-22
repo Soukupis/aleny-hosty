@@ -77,7 +77,7 @@ const AddColorModal = ({ triggerComponent, setAdding, setError }) => {
                 )}
 
                 <Button type="submit" disabled={isSubmitting} positive>
-                  Submit
+                  Přidat
                 </Button>
                 <Button negative onClick={() => setOpen(false)}>
                   Zrušit

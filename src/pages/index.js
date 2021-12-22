@@ -2,7 +2,7 @@ import HomePage from "./home/HomePage";
 import OverviewPage from "./overview/OverviewPage";
 import SizesPage from "./sizes/SizesPage";
 import SunDemandsPage from "./sun-demands/SunDemandsPage";
-import WaterDemandsPage from "./water-demands/WaterDemandsPage";
+import BuyPlacesPage from "./buyPlaces/BuyPlacesPage";
 import LocationsPage from "./locations/LocationsPage";
 import AccountPage from "./account/AccountPage";
 import SettingsPage from "./settings/SettingsPage";
@@ -19,7 +19,7 @@ export {
   LocationsPage,
   AccountPage,
   SettingsPage,
-  WaterDemandsPage,
   ColorsPage,
   RegisterPage,
+  BuyPlacesPage,
 };

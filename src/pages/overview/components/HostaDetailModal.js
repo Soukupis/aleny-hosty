@@ -3,16 +3,20 @@ import { Formik } from "formik";
 import { Button, Modal, Grid, Form, Message, Select } from "semantic-ui-react";
 import {
   LocationImage,
-  WaterImage,
   SunImage,
   SizeImage,
   ClockImage,
   ColorImage,
+  ShoppingCart,
 } from "../../../assets/index";
 import ImageModal from "./ImageModal";
 import ModalCard from "./ModalCard";
 import { CardGroup } from "../styles/OverviewPageStyle";
 import { editDocument } from "../../../utils/firebaseUtils";
+import { useAuth } from "../../../contexts/AuthContext";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const HostaDetailModal = ({
   triggerComponent,
@@ -21,12 +25,14 @@ const HostaDetailModal = ({
   locations,
   sizes,
   sunDemands,
-  waterDemands,
+  buyPlaces,
   colors,
   setEditing,
 }) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState(false);
+
+  const { isAdmin } = useAuth();
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -57,7 +63,7 @@ const HostaDetailModal = ({
             marginTop: "5px",
           }}
         >
-          {input ? (
+          {input && isAdmin ? (
             <>
               <Formik
                 initialValues={{
@@ -68,8 +74,8 @@ const HostaDetailModal = ({
                   size: item?.size,
                   color: item?.color,
                   sunDemand: item?.sunDemand,
-                  waterDemand: item?.waterDemand,
-                  buyDate: item?.buyDate,
+                  buyDate: item?.buyDate.toDate(),
+                  buyPlace: item?.buyPlace,
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -91,11 +97,11 @@ const HostaDetailModal = ({
                   if (!values.sunDemand) {
                     errors.sunDemand = "Pole nesmí být prázdné";
                   }
-                  if (!values.waterDemand) {
-                    errors.waterDemand = "Pole nesmí být prázdné";
-                  }
                   if (!values.buyDate) {
                     errors.buyDate = "Pole nesmí být prázdné";
+                  }
+                  if (!values.buyPlace) {
+                    errors.buyPlace = "Pole nesmí být prázdné";
                   }
                   if (!values.registrationNumber) {
                     errors.registrationNumber = "Pole nesmí být prázdné";
@@ -103,7 +109,6 @@ const HostaDetailModal = ({
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  setEditing(true);
                   editDocument("hostas", item.id, {
                     hostaId: item.hostaId,
                     name: values.name,
@@ -112,10 +117,10 @@ const HostaDetailModal = ({
                     location: values.location,
                     color: values.color,
                     sunDemand: values.sunDemand,
-                    waterDemand: values.waterDemand,
-                    buyDate: new Date(),
+                    buyDate: values.buyDate,
                     registrationNumber: values.registrationNumber,
                     lastChange: new Date(),
+                    buyPlace: values.buyPlace,
                   })
                     .catch((error) => {
                       //setError(error);
@@ -294,40 +299,42 @@ const HostaDetailModal = ({
                         ) : (
                           ""
                         )}
-
+                      </Form.Group>
+                      <Form.Group widths="equal">
                         <Form.Input
                           control={Select}
                           size="small"
-                          name="waterDemand"
-                          label="Nároky na vláhu"
-                          options={waterDemands}
+                          name="buyPlace"
+                          options={buyPlaces}
+                          label="Pořizovací místo"
                           onChange={handleChange}
-                          value={values.waterDemand}
+                          value={values.buyPlace}
                         />
 
-                        {errors.waterDemand &&
-                        touched.waterDemand &&
-                        errors.waterDemand ? (
+                        {errors.buyPlace &&
+                        touched.buyPlace &&
+                        errors.buyPlace ? (
                           <Message
                             negative
                             style={{ marginTop: "0px" }}
                             size="mini"
                           >
-                            <Message.Header>
-                              {errors.waterDemand}
-                            </Message.Header>
+                            <Message.Header>{errors.buyPlace}</Message.Header>
                           </Message>
                         ) : (
                           ""
                         )}
                       </Form.Group>
                       <Form.Group widths="equal">
-                        <Form.Input
-                          size="small"
+                        <DatePicker
+                          id="buyDate"
                           name="buyDate"
-                          label="Datum pořízení"
-                          onChange={handleChange}
-                          value={values.buyDate.toDate().toDateString()}
+                          placeholder="Zadejte datum pořízení"
+                          value={values.buyDate}
+                          selected={values.buyDate}
+                          onChange={(val) => {
+                            setFieldValue("buyDate", val);
+                          }}
                         />
 
                         {errors.buyDate && touched.buyDate && errors.buyDate ? (
@@ -344,7 +351,7 @@ const HostaDetailModal = ({
                       </Form.Group>
 
                       <Button type="submit" disabled={isSubmitting} positive>
-                        Submit
+                        Potvrdit
                       </Button>
                     </Form>
                   );
@@ -369,9 +376,9 @@ const HostaDetailModal = ({
                 subtitile="Nároky na slunce"
               />
               <ModalCard
-                icon={WaterImage}
-                title={item?.waterDemand}
-                subtitile="Nároky na vláhu"
+                icon={ShoppingCart}
+                title={item?.buyPlace}
+                subtitile="Místo pořízení"
               />
               <ModalCard
                 icon={ColorImage}
@@ -388,8 +395,14 @@ const HostaDetailModal = ({
         </CardGroup>
       </Modal.Content>
       <Modal.Actions>
-        {!input ? (
-          <Button onClick={() => setInput(true)} primary>
+        {!input && isAdmin ? (
+          <Button
+            onClick={() => {
+              setEditing(true);
+              setInput(true);
+            }}
+            primary
+          >
             Upravit
           </Button>
         ) : (

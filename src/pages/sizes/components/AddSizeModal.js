@@ -25,9 +25,6 @@ const AddSizeModal = ({ triggerComponent, setAdding, setError }) => {
               if (!values.size) {
                 errors.size = "Pole nesmí být prázdné";
               }
-              if (!/^[0-9]*$/.test(values.size)) {
-                errors.size = "Pole musí obsahovat pouze číslice";
-              }
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
@@ -77,7 +74,7 @@ const AddSizeModal = ({ triggerComponent, setAdding, setError }) => {
                 )}
 
                 <Button type="submit" disabled={isSubmitting} positive>
-                  Submit
+                  Přidat
                 </Button>
                 <Button negative onClick={() => setOpen(false)}>
                   Zrušit

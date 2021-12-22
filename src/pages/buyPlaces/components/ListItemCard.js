@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Item, Image, Button, Form, Input, Message } from "semantic-ui-react";
 
 import { DeleteModal } from "../../../components/index";
-import { WaterImage } from "../../../assets/index";
+import { ShoppingCart } from "../../../assets/index";
 import { Formik } from "formik";
 import { editDocument } from "../../../utils/firebaseUtils";
 
@@ -38,32 +38,33 @@ const ListItemCard = ({
               onClick={() => setRemoving(true)}
             />
           }
-          text={`Vážně chcete odstranit nárok na vodu ${item?.demand} ?`}
-          title="Mazání nároku na vodu"
+          text={`Vážně chcete odstranit pořizovací místo ${item?.place} ?`}
+          title="Mazání pořizovacího místa"
           collection={collection}
           item={item}
           setRemoving={setRemoving}
         />
       </Item.Content>
-      <Image size="mini" src={WaterImage} alt="avatar" />
+
+      <Image size="mini" src={ShoppingCart} alt="avatar" />
       <Item.Content>
         <Item.Header>
           {!input ? (
-            item?.demand
+            item?.place
           ) : (
             <>
               <Formik
-                initialValues={{ demand: item?.demand }}
+                initialValues={{ place: item?.place }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.demand) {
-                    errors.demand = "Pole nesmí být prázdné";
+                  if (!values.place) {
+                    errors.place = "Pole nesmí být prázdné";
                   }
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  editDocument("waterDemands", item.id, {
-                    demand: values.demand,
+                  editDocument("buyPlaces", item.id, {
+                    place: values.place,
                     lastChange: new Date(),
                   })
                     .catch((error) => {
@@ -86,20 +87,21 @@ const ListItemCard = ({
                   <Form onSubmit={handleSubmit}>
                     <Form.Group>
                       <Form.Field
-                        size="mini"
-                        name="demand"
+                        size="small"
+                        name="place"
                         control={Input}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.demand}
+                        value={values.place}
+                        focus
                       />
-                      {errors.demand && touched.demand && errors.demand ? (
+                      {errors.place && touched.place && errors.place ? (
                         <Message
                           negative
                           style={{ marginTop: "0px" }}
                           size="mini"
                         >
-                          <Message.Header>{errors.demand}</Message.Header>
+                          <Message.Header>{errors.place}</Message.Header>
                         </Message>
                       ) : (
                         ""
