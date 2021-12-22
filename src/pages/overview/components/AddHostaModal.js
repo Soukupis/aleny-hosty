@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, Form, Select } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Select, Message } from "semantic-ui-react";
 import db, { storage } from "../../../firebase";
 import { v4 as uuid } from "uuid";
 import DatePicker from "react-datepicker";
@@ -10,9 +10,9 @@ import { Formik } from "formik";
 const AddHostaModal = ({
   triggerComponent,
   sizes,
-  waterDemands,
   sunDemands,
   locations,
+  buyPlaces,
   colors,
   setAdding,
   setError,
@@ -71,40 +71,14 @@ const AddHostaModal = ({
                 location: "",
                 color: "",
                 sunDemand: "",
-                waterDemand: "",
                 buyDate: new Date(),
                 registrationNumber: "",
                 lastChange: "",
+                buyPlace: "",
               }}
               validate={(values) => {
                 const errors = {};
-                if (!values.size) {
-                  errors.size = "Pole nesmí být prázdné";
-                }
-                if (!values.name) {
-                  errors.name = "Pole nesmí být prázdné";
-                }
-                if (!values.latinName) {
-                  errors.latinName = "Pole nesmí být prázdné";
-                }
-                if (!values.location) {
-                  errors.location = "Pole nesmí být prázdné";
-                }
-                if (!values.color) {
-                  errors.color = "Pole nesmí být prázdné";
-                }
-                if (!values.sunDemand) {
-                  errors.sunDemand = "Pole nesmí být prázdné";
-                }
-                if (!values.waterDemand) {
-                  errors.waterDemand = "Pole nesmí být prázdné";
-                }
-                if (!values.buyDate) {
-                  errors.buyDate = "Pole nesmí být prázdné";
-                }
-                if (!values.registrationNumber) {
-                  errors.registrationNumber = "Pole nesmí být prázdné";
-                }
+
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
@@ -121,10 +95,10 @@ const AddHostaModal = ({
                     location: values.location,
                     color: values.color,
                     sunDemand: values.sunDemand,
-                    waterDemand: values.waterDemand,
                     buyDate: values.buyDate,
                     registrationNumber: values.registrationNumber,
                     lastChange: new Date(),
+                    buyPlace: values.buyPlace,
                   })
                   .catch((error) => setError(error))
                   .then((response) => {
@@ -179,15 +153,6 @@ const AddHostaModal = ({
                     <Form.Group widths="equal">
                       <Form.Field
                         control={Select}
-                        name="waterDemand"
-                        label="Nárok na vláhu"
-                        placeholder="Vyberte nárok na vláhu..."
-                        options={waterDemands}
-                        onChange={handleChange}
-                        value={values.waterDemand}
-                      />
-                      <Form.Field
-                        control={Select}
                         label="Nárok na slunce"
                         name="sunDemand"
                         placeholder="Vyberte nárok na slunce..."
@@ -195,8 +160,16 @@ const AddHostaModal = ({
                         onChange={handleChange}
                         value={values.sunDemand}
                       />
+                      <Form.Field
+                        control={Select}
+                        label="Pořizovací místo"
+                        name="buyPlace"
+                        placeholder="Vyberte pořizovací místo..."
+                        options={buyPlaces}
+                        onChange={handleChange}
+                        value={values.buyPlace}
+                      />
                     </Form.Group>
-
                     <Form.Group widths="equal">
                       <Form.Field
                         control={Select}
@@ -251,7 +224,7 @@ const AddHostaModal = ({
                     </Form.Group>
 
                     <Button type="submit" disabled={isSubmitting} positive>
-                      Submit
+                      Přidat
                     </Button>
                     <Button negative onClick={() => setOpen(false)}>
                       Zrušit

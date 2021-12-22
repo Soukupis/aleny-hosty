@@ -1,4 +1,3 @@
-import WaterImage from "./water.png";
 import SunImage from "./sun.png";
 import LeafImage from "./leaf.png";
 import Background from "./bg.jpg";
@@ -10,9 +9,9 @@ import OverviewImage from "./research.png";
 import ClockImage from "./clock.png";
 import ColorImage from "./ColorPalette.png";
 import Placeholder from "./placeholder.png";
+import ShoppingCart from "./shopping-cart.png";
 
 export {
-  WaterImage,
   SunImage,
   LeafImage,
   Background,
@@ -24,4 +23,5 @@ export {
   ClockImage,
   ColorImage,
   Placeholder,
+  ShoppingCart,
 };

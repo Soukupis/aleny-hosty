@@ -3,8 +3,9 @@ import { Modal, Button, Input, Form, Message } from "semantic-ui-react";
 import { Formik } from "formik";
 import db from "../../../firebase";
 
-const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
+const AddBuyPlaceModal = ({ triggerComponent, setAdding, setError }) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -14,25 +15,25 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
       centered
       size="small"
     >
-      <Modal.Header>Přidání nároku na vodu</Modal.Header>
+      <Modal.Header>Přidání pořizovacího místa</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Formik
-            initialValues={{ waterDemand: "" }}
+            initialValues={{ place: "" }}
             validate={(values) => {
               const errors = {};
-              if (!values.waterDemand) {
-                errors.waterDemand = "Pole nesmí být prázdné";
+              if (!values.place) {
+                errors.place = "Pole nesmí být prázdné";
               }
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
               setAdding(true);
               db.firestore()
-                .collection("waterDemands")
+                .collection("buyPlaces")
                 .doc()
                 .set({
-                  demand: values.waterDemand,
+                  place: values.place,
                   lastChange: new Date(),
                 })
                 .catch((error) => {
@@ -57,19 +58,17 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
               <Form onSubmit={handleSubmit}>
                 <Form.Group widths="equal">
                   <Form.Field
-                    name="waterDemand"
+                    name="place"
                     control={Input}
-                    label="Nárok na slunce"
+                    label="Pořizovací místo"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.size}
+                    value={values.place}
                   />
                 </Form.Group>
-                {errors.waterDemand &&
-                touched.waterDemand &&
-                errors.waterDemand ? (
+                {errors.place && touched.place && errors.place ? (
                   <Message negative>
-                    <Message.Header>{errors.waterDemand}</Message.Header>
+                    <Message.Header>{errors.place}</Message.Header>
                   </Message>
                 ) : (
                   ""
@@ -89,4 +88,4 @@ const AddWaterDemandModal = ({ triggerComponent, setAdding, setError }) => {
     </Modal>
   );
 };
-export default AddWaterDemandModal;
+export default AddBuyPlaceModal;

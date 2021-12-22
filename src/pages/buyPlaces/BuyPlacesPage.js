@@ -1,47 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { Grid, List, Header, Button, Divider, Modal } from "semantic-ui-react";
+import { Grid, List, Header, Button, Modal } from "semantic-ui-react";
 
 import { Sidebar } from "../../components";
 import { handleLoading } from "../../utils/messageUtils";
-import { AddWaterDemandModal, ListItemCard } from "./index";
 
 import { getFirestoreCollectionData } from "../../utils/firebaseUtils";
+import AddBuyPlaceModal from "./components/AddBuyPlaceModal";
 
-const WaterDemandsPage = () => {
-  const [waterDemands, setWaterDemands] = useState();
+import { ListItemCard } from "./index";
+
+const BuyPlacesPage = () => {
+  const [buyPlaces, setBuyPlaces] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  async function fetchWaterDemandsData() {
-    let waterDemandsList = [];
-    let waterDemandsResult = await getFirestoreCollectionData("waterDemands");
-    if (!waterDemandsResult) setError(true);
-    waterDemandsList = waterDemandsResult.map((item, index) => {
+  async function fetchLocationData() {
+    let buyPlacesList = [];
+    let buyPlacesResult = await getFirestoreCollectionData("buyPlaces");
+    if (!buyPlacesResult) setError("Načtení dat se nezdařilo");
+    buyPlacesList = buyPlacesResult.map((item, index) => {
       return (
         <ListItemCard
           item={item}
           key={index}
-          collection="waterDemands"
+          collection="buyPlaces"
           setRemoving={setRemoving}
           setEditing={setEditing}
           setError={setError}
         />
       );
     });
-    setWaterDemands(waterDemandsList);
+    setBuyPlaces(buyPlacesList);
   }
 
   useEffect(() => {
     setLoading(true);
 
-    const unsubscribe = fetchWaterDemandsData()
+    const unsubscribe = fetchLocationData()
       .catch((error) => {
         setError(error);
       })
-      .then(() => setLoading(false));
+      .then(() => {
+        setLoading(false);
+      });
     return unsubscribe;
   }, [adding, removing, editing]);
   return (
@@ -66,10 +70,10 @@ const WaterDemandsPage = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width="eight" floated="left">
-              <Header as="h1">Nároky na vláhu</Header>
+              <Header as="h1">Pořizovací místa</Header>
             </Grid.Column>
             <Grid.Column>
-              <AddWaterDemandModal
+              <AddBuyPlaceModal
                 triggerComponent={
                   <Button color="green" icon="plus" loading={loading} />
                 }
@@ -79,13 +83,12 @@ const WaterDemandsPage = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Divider clearing />
         <List divided size="huge" verticalAlign="middle">
-          {waterDemands}
+          {buyPlaces}
         </List>
       </Sidebar>
     </>
   );
 };
 
-export default WaterDemandsPage;
+export default BuyPlacesPage;

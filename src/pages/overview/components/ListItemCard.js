@@ -16,9 +16,9 @@ const ListItemCard = ({
   sizes,
   colors,
   sunDemands,
-  waterDemands,
   setEditing,
   setLoading,
+  buyPlaces,
 }) => {
   const [images, setImages] = useState([]);
   useEffect(() => {
@@ -46,8 +46,8 @@ const ListItemCard = ({
           sizes={sizes}
           colors={colors}
           sunDemands={sunDemands}
-          waterDemands={waterDemands}
           setEditing={setEditing}
+          buyPlaces={buyPlaces}
         />
         <DeleteModal
           triggerComponent={

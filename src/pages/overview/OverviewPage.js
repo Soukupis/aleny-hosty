@@ -14,10 +14,10 @@ import { useAuth } from "../../contexts/AuthContext";
 const OverviewPage = () => {
   const [hosty, setHosty] = useState([]);
   const [sizes, setSizes] = useState();
-  const [waterDemands, setWaterDemands] = useState();
   const [sunDemands, setSunDemands] = useState();
   const [locations, setLocations] = useState();
   const [colors, setColors] = useState();
+  const [buyPlaces, setBuyPlaces] = useState();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -41,10 +41,8 @@ const OverviewPage = () => {
           item.sunDemand
             .toUpperCase()
             .includes(filter.sunDemand.toUpperCase()) &&
-          item.waterDemand
-            .toUpperCase()
-            .includes(filter.waterDemand.toUpperCase()) &&
-          item.location.toUpperCase().includes(filter.location.toUpperCase())
+          item.location.toUpperCase().includes(filter.location.toUpperCase()) &&
+          item.buyPlace.toUpperCase().includes(filter.buyPlace.toUpperCase())
             ? (is = true)
             : (is = false);
 
@@ -59,13 +57,6 @@ const OverviewPage = () => {
         setSizes(sizesDrop);
       } else {
         sizesDrop = sizes;
-      }
-      let waterDemandsDrop;
-      if (!waterDemands) {
-        waterDemandsDrop = await getDropdownItemArray("demand", "waterDemands");
-        setWaterDemands(waterDemandsDrop);
-      } else {
-        waterDemandsDrop = waterDemands;
       }
       let sunDemandsDrop;
       if (!sunDemands) {
@@ -88,6 +79,13 @@ const OverviewPage = () => {
       } else {
         colorsDrop = colors;
       }
+      let buyPlacesDrop;
+      if (!buyPlaces) {
+        buyPlacesDrop = await getDropdownItemArray("place", "buyPlaces");
+        setBuyPlaces(buyPlacesDrop);
+      } else {
+        buyPlacesDrop = buyPlaces;
+      }
 
       setHosty(
         hostasResult.map((item, index) => {
@@ -96,8 +94,8 @@ const OverviewPage = () => {
               locations={locationsDrop}
               sizes={sizesDrop}
               sunDemands={sunDemandsDrop}
-              waterDemands={waterDemandsDrop}
               colors={colorsDrop}
+              buyPlaces={buyPlacesDrop}
               item={item}
               key={index}
               collection="hostas"
@@ -128,9 +126,9 @@ const OverviewPage = () => {
     filter,
     colors,
     locations,
-    waterDemands,
     sunDemands,
     sizes,
+    buyPlaces,
   ]);
 
   return (
@@ -161,10 +159,10 @@ const OverviewPage = () => {
               <Grid.Column style={{ textAlign: "right" }}>
                 <AddHostaModal
                   sizes={sizes}
-                  waterDemands={waterDemands}
                   sunDemands={sunDemands}
                   locations={locations}
                   colors={colors}
+                  buyPlaces={buyPlaces}
                   triggerComponent={
                     <Button color="green" icon="plus" loading={loading} />
                   }

@@ -10,8 +10,8 @@ import {
   LocationsPage,
   AccountPage,
   SettingsPage,
-  WaterDemandsPage,
   ColorsPage,
+  BuyPlacesPage,
 } from "./pages";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PrivateRoute, PublicRoute, AdminRoute } from "./components/index";
@@ -27,7 +27,7 @@ const App = () => {
           <PublicRoute path="/register" component={RegisterPage} />
           <PrivateRoute path="/overview" component={OverviewPage} />
           <AdminRoute path="/sun-demands" component={SunDemandsPage} />
-          <AdminRoute path="/water-demands" component={WaterDemandsPage} />
+          <AdminRoute path="/buy-places" component={BuyPlacesPage} />
           <AdminRoute path="/locations" component={LocationsPage} />
           <PrivateRoute path="/account" component={AccountPage} />
           <AdminRoute path="/sizes" component={SizesPage} />

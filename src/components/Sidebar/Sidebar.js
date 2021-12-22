@@ -37,20 +37,16 @@ const Sidebar = ({ children, setFilter }) => {
   const [latinName, setLatinName] = useState(false);
   const [czechName, setCzechName] = useState(false);
   const [sunDemands, setSunDemands] = useState(false);
-  const [waterDemands, setWaterDemands] = useState(false);
+  const [buyPlaces, setBuyPlaces] = useState(false);
   const [location, setLocation] = useState(false);
   const [size, setSize] = useState(false);
   const [sunDemandsSelectList, setSunDemandsSelectList] = useState([]);
-  const [waterDemandsSelectList, setWaterDemandsSelectList] = useState([]);
   const [locationsSelectList, setLocationsSelectList] = useState([]);
+  const [buyPlacesSelectList, setBuyPlacesSelectList] = useState([]);
 
   const { currentUser, isAdmin } = useAuth();
 
   const fetchCollectionData = async () => {
-    let waterDemandDropdownArray = await getDropdownItemArray(
-      "demand",
-      "waterDemands"
-    );
     let sunDemandDropdownArray = await getDropdownItemArray(
       "demand",
       "sunDemands"
@@ -59,7 +55,11 @@ const Sidebar = ({ children, setFilter }) => {
       "location",
       "locations"
     );
-    setWaterDemandsSelectList(waterDemandDropdownArray);
+    let buyPlacesDropdownArray = await getDropdownItemArray(
+      "place",
+      "buyPlaces"
+    );
+    setBuyPlacesSelectList(buyPlacesDropdownArray);
     setSunDemandsSelectList(sunDemandDropdownArray);
     setLocationsSelectList(locationsDropdownArray);
   };
@@ -143,8 +143,8 @@ const Sidebar = ({ children, setFilter }) => {
                   <Link to="/sun-demands">
                     <Dropdown.Item>Nároky na slunce</Dropdown.Item>
                   </Link>
-                  <Link to="/water-demands">
-                    <Dropdown.Item>Nároky na vodu</Dropdown.Item>
+                  <Link to="/buy-places">
+                    <Dropdown.Item>Pořizovací místa</Dropdown.Item>
                   </Link>
                 </Dropdown.Menu>
               </Dropdown>
@@ -171,29 +171,26 @@ const Sidebar = ({ children, setFilter }) => {
             name: "",
             latinName: "",
             sunDemand: "",
-            waterDemand: "",
             location: "",
+            buyPlace: "",
           }}
           onSubmit={(values, { setSubmitting }) => {
             setFilter({
               name: values.name,
               latinName: values.latinName,
               sunDemand: values.sunDemand,
-              waterDemand: values.waterDemand,
               location: values.location,
+              buyPlace: values.buyPlace,
             });
             setSubmitting(false);
           }}
         >
           {({
             values,
-            errors,
-            touched,
             setFieldValue,
             handleBlur,
             handleSubmit,
             isSubmitting,
-            /* and other goodies */
           }) => {
             const handleChange = (e, { name, value }) => {
               setFieldValue(name, value);
@@ -284,28 +281,28 @@ const Sidebar = ({ children, setFilter }) => {
                       <Grid.Column>
                         <Form.Field>
                           <Checkbox
-                            label="Nárok na vodu"
+                            label="Místo pořízení"
                             onClick={() => {
-                              setWaterDemands(!waterDemands);
-                              values.waterDemad = "";
+                              setBuyPlaces(!buyPlaces);
+                              values.buyPlace = "";
                             }}
                           />
                         </Form.Field>
                       </Grid.Column>
                     </BottomFormRow>
-                    <FormRow>
+                    <Grid.Row columns={1}>
                       <Grid.Column>
                         <Form.Field
                           control={Select}
-                          name="waterDemand"
-                          options={waterDemandsSelectList}
-                          placeholder="Nárok na vodu"
-                          disabled={!waterDemands}
+                          name="buyPlace"
+                          options={buyPlacesSelectList}
+                          placeholder="Místo pořízení"
+                          disabled={!buyPlaces}
                           onChange={handleChange}
-                          value={values.waterDemand}
+                          value={values.buyPlace}
                         />
                       </Grid.Column>
-                    </FormRow>
+                    </Grid.Row>
                     <Divider clearing />
                     <Grid.Row
                       columns={1}
