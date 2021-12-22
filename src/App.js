@@ -21,7 +21,7 @@ import "./App.css";
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/aleny-hosty">
         <Switch>
           <PublicRoute path="/login" component={LoginPage} />
           <PublicRoute path="/register" component={RegisterPage} />
