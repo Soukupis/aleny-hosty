@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/aleny-hosty/static/css/main.dff8d076.chunk.css",
-    "main.js": "/aleny-hosty/static/js/main.ef4bd630.chunk.js",
-    "main.js.map": "/aleny-hosty/static/js/main.ef4bd630.chunk.js.map",
+    "main.js": "/aleny-hosty/static/js/main.e6c2851f.chunk.js",
+    "main.js.map": "/aleny-hosty/static/js/main.e6c2851f.chunk.js.map",
     "runtime-main.js": "/aleny-hosty/static/js/runtime-main.2dd0b148.js",
     "runtime-main.js.map": "/aleny-hosty/static/js/runtime-main.2dd0b148.js.map",
     "static/css/2.cf940b81.chunk.css": "/aleny-hosty/static/css/2.cf940b81.chunk.css",
@@ -29,6 +29,6 @@
     "static/css/2.cf940b81.chunk.css",
     "static/js/2.a1145ea2.chunk.js",
     "static/css/main.dff8d076.chunk.css",
-    "static/js/main.ef4bd630.chunk.js"
+    "static/js/main.e6c2851f.chunk.js"
   ]
 }
