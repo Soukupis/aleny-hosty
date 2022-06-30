@@ -91,8 +91,8 @@ const ListItemCard = ({
         </Modal.Content>
       </Modal>
       <Item.Content>
-        <Item.Header>{item?.name}</Item.Header>
-        <span style={{ fontSize: "12px" }}>{item?.latinName}</span>
+        <Item.Header>({item?.registrationNumber}) {item?.latinName}</Item.Header>
+        <span style={{ fontSize: "12px" }}>{item?.name}</span>
       </Item.Content>
     </Item>
   );
