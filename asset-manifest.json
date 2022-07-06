@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/aleny-hosty/static/css/main.dff8d076.chunk.css",
-    "main.js": "/aleny-hosty/static/js/main.e0879ced.chunk.js",
-    "main.js.map": "/aleny-hosty/static/js/main.e0879ced.chunk.js.map",
+    "main.js": "/aleny-hosty/static/js/main.79304642.chunk.js",
+    "main.js.map": "/aleny-hosty/static/js/main.79304642.chunk.js.map",
     "runtime-main.js": "/aleny-hosty/static/js/runtime-main.2dd0b148.js",
     "runtime-main.js.map": "/aleny-hosty/static/js/runtime-main.2dd0b148.js.map",
     "static/css/2.4ea3af50.chunk.css": "/aleny-hosty/static/css/2.4ea3af50.chunk.css",
-    "static/js/2.9c5cc284.chunk.js": "/aleny-hosty/static/js/2.9c5cc284.chunk.js",
-    "static/js/2.9c5cc284.chunk.js.map": "/aleny-hosty/static/js/2.9c5cc284.chunk.js.map",
+    "static/js/2.88f07942.chunk.js": "/aleny-hosty/static/js/2.88f07942.chunk.js",
+    "static/js/2.88f07942.chunk.js.map": "/aleny-hosty/static/js/2.88f07942.chunk.js.map",
     "index.html": "/aleny-hosty/index.html",
     "static/css/2.4ea3af50.chunk.css.map": "/aleny-hosty/static/css/2.4ea3af50.chunk.css.map",
     "static/css/main.dff8d076.chunk.css.map": "/aleny-hosty/static/css/main.dff8d076.chunk.css.map",
-    "static/js/2.9c5cc284.chunk.js.LICENSE.txt": "/aleny-hosty/static/js/2.9c5cc284.chunk.js.LICENSE.txt",
+    "static/js/2.88f07942.chunk.js.LICENSE.txt": "/aleny-hosty/static/js/2.88f07942.chunk.js.LICENSE.txt",
     "static/media/ColorPalette.0e510f5d.png": "/aleny-hosty/static/media/ColorPalette.0e510f5d.png",
     "static/media/bg.0dea103c.jpg": "/aleny-hosty/static/media/bg.0dea103c.jpg",
     "static/media/semantic.min.css": "/aleny-hosty/static/media/outline-icons.ddae9b1b.woff",
@@ -27,8 +27,8 @@
   "entrypoints": [
     "static/js/runtime-main.2dd0b148.js",
     "static/css/2.4ea3af50.chunk.css",
-    "static/js/2.9c5cc284.chunk.js",
+    "static/js/2.88f07942.chunk.js",
     "static/css/main.dff8d076.chunk.css",
-    "static/js/main.e0879ced.chunk.js"
+    "static/js/main.79304642.chunk.js"
   ]
 }
