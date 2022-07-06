@@ -36,6 +36,7 @@ const Sidebar = ({ children, setFilter }) => {
   const [menuWidth, setMenuWidth] = useState(null);
   const [latinName, setLatinName] = useState(false);
   const [czechName, setCzechName] = useState(false);
+  const [idNumber, setIdNumber] = useState("");
   const [sunDemands, setSunDemands] = useState(false);
   const [buyPlaces, setBuyPlaces] = useState(false);
   const [location, setLocation] = useState(false);
@@ -44,7 +45,7 @@ const Sidebar = ({ children, setFilter }) => {
   const [locationsSelectList, setLocationsSelectList] = useState([]);
   const [buyPlacesSelectList, setBuyPlacesSelectList] = useState([]);
 
-  const { currentUser, isAdmin } = useAuth();
+  const { auth, isAdmin, currentUser } = useAuth();
 
   const fetchCollectionData = async () => {
     let sunDemandDropdownArray = await getDropdownItemArray(
@@ -65,7 +66,8 @@ const Sidebar = ({ children, setFilter }) => {
   };
 
   useEffect(() => {
-    setMenuWidth(document.getElementsByClassName("menu")[0].clientWidth);
+
+    setMenuWidth(window.innerWidth < 600 ? 0 :document.getElementsByClassName("menu")[0].clientWidth);
     const unsubscribe = fetchCollectionData()
       .catch((error) => {
         setError(error);
@@ -74,7 +76,7 @@ const Sidebar = ({ children, setFilter }) => {
         setLoading(false);
       });
     return unsubscribe;
-  }, [currentUser]);
+  }, [auth]);
 
   const resetFilter = () => {
     setFilter(null);
@@ -84,13 +86,13 @@ const Sidebar = ({ children, setFilter }) => {
     <>
       {handleLoading(loading)}
       {error ? (
-        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
+        <Modal size="tiny" open={!!error} onClose={() => setError("")}>
           <Modal.Header>Chyba</Modal.Header>
           <Modal.Content>
             <p>{error}</p>
           </Modal.Content>
           <Modal.Actions>
-            <Button negative onClick={() => setError(false)}>
+            <Button negative onClick={() => setError("")}>
               Zavřít
             </Button>
           </Modal.Actions>
@@ -99,9 +101,8 @@ const Sidebar = ({ children, setFilter }) => {
         ""
       )}
       <div
-        id="top-menu"
         className="ui left fixed vertical menu hidden huge"
-        style={{ overflowY: "scroll" }}
+        style={{ overflowY: "scroll", display: `${window.innerWidth < 600 ? "none" : ""}`}}
       >
         <Link to="/dashboard">
           <SidebarHeader className="item">
@@ -168,6 +169,7 @@ const Sidebar = ({ children, setFilter }) => {
         )}
         <Formik
           initialValues={{
+            idNumber: "",
             name: "",
             latinName: "",
             sunDemand: "",
@@ -176,6 +178,7 @@ const Sidebar = ({ children, setFilter }) => {
           }}
           onSubmit={(values, { setSubmitting }) => {
             setFilter({
+              idNumber: values.idNumber,
               name: values.name,
               latinName: values.latinName,
               sunDemand: values.sunDemand,
@@ -199,6 +202,31 @@ const Sidebar = ({ children, setFilter }) => {
               <Segment basic>
                 <Form size="tiny" onSubmit={handleSubmit}>
                   <Grid textAlign="left">
+                    <FormRow columns={2}>
+                      <Grid.Column>
+                        <Form.Field style={{ marginTop: "10px" }}>
+                          <Checkbox
+                              label="Pořadové číslo"
+                              onClick={() => {
+                                setIdNumber(!idNumber);
+                                values.id = "";
+                              }}
+                          />
+                        </Form.Field>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Form.Field
+                            name="idNumber"
+                            icon="search"
+                            control={Input}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.idNumber}
+                            disabled={!idNumber}
+                            placeholder="Pořadové číslo"
+                        />
+                      </Grid.Column>
+                    </FormRow>
                     <FormRow columns={2}>
                       <Grid.Column>
                         <Form.Field style={{ marginTop: "10px" }}>
@@ -377,15 +405,10 @@ const Sidebar = ({ children, setFilter }) => {
           }}
         </Formik>
       </div>
-      <div
-        style={{
-          marginLeft: menuWidth,
-        }}
-      >
-        <Segment basic style={{ paddingLeft: "20px" }}>
+
+        <Segment basic style={{ paddingLeft: "20px", marginLeft:menuWidth, }}>
           {children}
         </Segment>
-      </div>
     </>
   );
 };

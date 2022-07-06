@@ -10,7 +10,6 @@ import {
   getDropdownItemArray,
 } from "../../utils/firebaseUtils";
 import { useAuth } from "../../contexts/AuthContext";
-import * as CONSTANTS from "constants";
 
 const OverviewPage = () => {
   const [hosty, setHosty] = useState([]);
@@ -35,6 +34,8 @@ const OverviewPage = () => {
       if (filter) {
         let is = false;
         hostaResult1 = hostasResult.filter((item) => {
+          console.log(item.registrationNumber, filter.idNumber)
+          item.registrationNumber === filter.idNumber+"." &&
           item.name.toUpperCase().includes(filter.name.toUpperCase()) &&
           item.latinName
             .toUpperCase()
@@ -129,13 +130,13 @@ const OverviewPage = () => {
     <>
       {handleLoading(loading)}
       {error ? (
-        <Modal size="tiny" open={!!error} onClose={() => setError(false)}>
+        <Modal size="tiny" open={!!error} onClose={() => setError("")}>
           <Modal.Header>Chyba</Modal.Header>
           <Modal.Content>
             <p>{error}</p>
           </Modal.Content>
           <Modal.Actions>
-            <Button negative onClick={() => setError(false)}>
+            <Button negative onClick={() => setError("")}>
               Zavřít
             </Button>
           </Modal.Actions>

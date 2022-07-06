@@ -50,13 +50,13 @@ const SunDemandsPage = () => {
       <>
         {handleLoading(loading)}
         {error ? (
-            <Modal size="tiny" open={error} onClose={() => setError(false)}>
+            <Modal size="tiny" open={error} onClose={() => setError("")}>
               <Modal.Header>Chyba</Modal.Header>
               <Modal.Content>
                 <p>{error}</p>
               </Modal.Content>
               <Modal.Actions>
-                <Button negative onClick={() => setError(false)}>
+                <Button negative onClick={() => setError("")}>
                   Zavřít
                 </Button>
               </Modal.Actions>

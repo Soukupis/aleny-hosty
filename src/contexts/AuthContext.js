@@ -9,7 +9,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [authentication, setAuthentication] = useState(null || Boolean(localStorage.getItem("auth")));
+  const [currentUser, setCurrentUser] = useState(null || localStorage.getItem("username"))
   const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -45,7 +46,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
+      setAuthentication(!!user);
+      setCurrentUser(user)
+      localStorage.setItem("auth", String(!!user))
+      localStorage.setItem("username", user.email)
       getUsers().then((response) => {
         setIsAdmin(decideIfAdmin(response, user));
       });
@@ -55,6 +59,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
+    authentication,
     currentUser,
     login,
     logout,

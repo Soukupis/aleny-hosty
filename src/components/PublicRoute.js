@@ -3,12 +3,12 @@ import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const PublicRoute = ({ component: Component, ...rest }) => {
-  const { currentUser } = useAuth();
+  const { authentication } = useAuth();
   return (
     <Route
       {...rest}
       render={(props) => {
-        return !currentUser ? (
+        return !authentication ? (
           <Component {...props} />
         ) : (
           <Redirect to="/overview" />
