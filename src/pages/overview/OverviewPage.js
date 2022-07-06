@@ -10,6 +10,7 @@ import {
   getDropdownItemArray,
 } from "../../utils/firebaseUtils";
 import { useAuth } from "../../contexts/AuthContext";
+import * as CONSTANTS from "constants";
 
 const OverviewPage = () => {
   const [hosty, setHosty] = useState([]);
@@ -30,10 +31,10 @@ const OverviewPage = () => {
   useEffect(() => {
     async function fetchCollectionData(filter) {
       let hostasResult = await getFirestoreCollectionData("hostas");
+      let hostaResult1 = []
       if (filter) {
         let is = false;
-        let hostaResult1 = hostasResult.filter((item) => {
-          console.log(filter);
+        hostaResult1 = hostasResult.filter((item) => {
           item.name.toUpperCase().includes(filter.name.toUpperCase()) &&
           item.latinName
             .toUpperCase()
@@ -45,7 +46,6 @@ const OverviewPage = () => {
           item.buyPlace.toUpperCase().includes(filter.buyPlace.toUpperCase())
             ? (is = true)
             : (is = false);
-
           return is;
         });
         hostasResult = hostaResult1;
@@ -108,7 +108,6 @@ const OverviewPage = () => {
         })
       );
     }
-
     setLoading(true);
 
     const unsubscribe = fetchCollectionData(filter)
@@ -124,11 +123,6 @@ const OverviewPage = () => {
     editing,
     removing,
     filter,
-    colors,
-    locations,
-    sunDemands,
-    sizes,
-    buyPlaces,
   ]);
 
   return (
